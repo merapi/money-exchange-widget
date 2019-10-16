@@ -1,12 +1,13 @@
 import React from 'react';
 import GlobalStyle from "components/GlobalStyle";
+import ExchangeScreen from "components/ExchangeScreen";
 
 const App: React.FC = () => {
   return (
-    <div>
+    <React.Fragment>
       <GlobalStyle />
-      init
-    </div>
+      <ExchangeScreen />
+    </React.Fragment>
   );
 }
 
