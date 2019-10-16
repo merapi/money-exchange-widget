@@ -8,9 +8,10 @@ interface Props {
   onChange?: (value: string) => void
   innerRef?: RefObject<HTMLInputElement>
   overBalance?: boolean
+  sign?: string
 }
 
-function BareMoneyInput({ className, placeholder, onChange, value, innerRef }: Props) {
+function BareMoneyInput({ className, placeholder, onChange, value, innerRef, sign }: Props) {
   function allowOnlyTwoDecimals(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
     const dotSplitted = value.split(".")
@@ -38,9 +39,29 @@ function BareMoneyInput({ className, placeholder, onChange, value, innerRef }: P
   }
 
   return (
-    <input {...passProps} placeholder="0" type="text" value={value} onChange={allowOnlyTwoDecimals} onKeyDown={allowOnlyNumbersAndDot} />
+    <Container>
+      {value ? <Sign>{sign}<Invisible>{value}</Invisible></Sign> : null}
+      <input {...passProps} placeholder="0" type="text" value={value} onChange={allowOnlyTwoDecimals} onKeyDown={allowOnlyNumbersAndDot} />
+    </Container>
   )
 }
+
+const Invisible = styled.span`
+  color: transparent;
+`
+const Sign = styled.div`
+  position: absolute;
+  font-size: 42px;
+  font-weight: 700;
+  text-align: right;
+  width: 245px;
+  padding: 5px 10px;
+  pointer-events: none;
+`
+
+const Container = styled.div`
+  position: relative;
+`
 
 const MoneyInput = styled(BareMoneyInput)`
   border: none;
@@ -51,7 +72,7 @@ const MoneyInput = styled(BareMoneyInput)`
   text-align: right;
   color: #efefef;
   background: transparent;
-  width: 100%;
+  width: 250px;
   ::placeholder {
     color: #699cc7;
   }

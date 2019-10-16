@@ -16,14 +16,14 @@ function ExchangeScreen() {
   }
 
   const onPocketFromChange = (value: string) => {
-    console.log('onPocketFromChange', value)
+    if (parseFloat(value) > 9999999) return;
     setPocketFromAmount(value)
     setPocketToAmount(value ? (parseFloat(value)*4.2816).toFixed(2) : '')
   }
   const onPocketToChange = (value: string) => {
-    console.log('onPocketToChange', value)
+    if (parseFloat(value) > 9999999) return;
     setPocketToAmount(value)
-    setPocketFromAmount((parseFloat(value)/4.2816).toFixed(2))
+    setPocketFromAmount(value ? (parseFloat(value)/4.2816).toFixed(2) : '')
   }
 
   const onPocketFromBalanceClick = (balance: string) => () => {

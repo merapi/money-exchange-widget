@@ -23,13 +23,14 @@ function BarePocket({ mainPocket, currency, amount, balance, className, onChange
     }
   }, [focusOnLoad]);
 
+  const sign = mainPocket ? '-' : '+'
   const overBalance = mainPocket && parseFloat(amount) > parseFloat(balance)
 
   return (
     <div className={className}>
       <Row>
         <Currency>{currency}</Currency>
-        <MoneyInput overBalance={overBalance} innerRef={inputRef} value={amount} onChange={onChange} />
+        <MoneyInput overBalance={overBalance} innerRef={inputRef} sign={sign} value={amount} onChange={onChange} />
       </Row>
       <Balance overBalance={overBalance} title="Click to use this amount" onClick={onBalanceClick(balance)}>
         You have {balance}
