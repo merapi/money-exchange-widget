@@ -1,24 +1,63 @@
-import React from "react"
+import React, { useState } from "react"
 import Pocket from "components/Pocket"
 import styled from "styled-components";
 
 function ExchangeScreen() {
-  function onExchangeClick() {
+  const pocketFromBalance = '500.00'
+  const [pocketFromAmount, setPocketFromAmount] = useState('')
+  const [pocketToAmount, setPocketToAmount] = useState('')
+  const exchangePossible = !!pocketFromAmount && parseFloat(pocketFromAmount) > 0 && parseFloat(pocketFromAmount) <= parseFloat(pocketFromBalance)
+
+  const onExchangeClick = () => {
     alert('API call')
   }
-  function onCancelClick() {
+  const onCancelClick = () => {
     alert('Go back')
+  }
+
+  const onPocketFromChange = (value: string) => {
+    console.log('onPocketFromChange', value)
+    setPocketFromAmount(value)
+    setPocketToAmount(value ? (parseFloat(value)*4.2816).toFixed(2) : '')
+  }
+  const onPocketToChange = (value: string) => {
+    console.log('onPocketToChange', value)
+    setPocketToAmount(value)
+    setPocketFromAmount((parseFloat(value)/4.2816).toFixed(2))
+  }
+
+  const onPocketFromBalanceClick = (balance: string) => () => {
+    setPocketFromAmount(balance)
+  }
+  const onPocketToBalanceClick = (balance: string) => () => {
+    setPocketToAmount(balance)
   }
 
   return (
     <Container>
       <Header>
         <Button onClick={onCancelClick} background="#282c34" hoverBackground="#3b3e45">Cancel</Button>
-        <Button onClick={onExchangeClick} background="#0074D9" hoverBackground="#2499ff">Exchange</Button>
+        <Button disabled={!exchangePossible} onClick={onExchangeClick} background="#0074D9" hoverBackground="#2499ff">Exchange</Button>
       </Header>
-      <Pocket currency="EUR" amount={100} balance={500} background="#0074D9" />
+      <Pocket
+        onChange={onPocketFromChange}
+        onBalanceClick={onPocketFromBalanceClick}
+        currency="EUR"
+        amount={pocketFromAmount}
+        balance={pocketFromBalance}
+        background="#0074D9"
+        focusOnLoad
+        mainPocket
+      />
       <ArrowDown color="#0074D9" />
-      <Pocket currency="PLN" amount={430} balance={0} background="#00468c" />
+      <Pocket
+        onChange={onPocketToChange}
+        onBalanceClick={onPocketToBalanceClick}
+        currency="PLN"
+        amount={pocketToAmount}
+        balance="0"
+        background="#00468c"
+      />
     </Container>
   )
 }
@@ -41,10 +80,11 @@ const Button = styled.button<{ background: string, hoverBackground: string }>`
   border: 0;
   border-radius: 5px;
   color: #efefef;
-  cursor: pointer;
+  cursor: ${({ disabled }) => disabled ? `not-allowed` : `pointer`};
   &:hover {
-    background: ${({ hoverBackground }) => hoverBackground};
+    background: ${({ hoverBackground, disabled }) => !disabled && hoverBackground};
   }
+  ${({ disabled }) => disabled ? `opacity: 0.4;` : ``}
 `
 
 const ArrowDown = styled.div`
