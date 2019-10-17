@@ -6,12 +6,13 @@ interface Props {
   placeholder?: string
   value?: string
   onChange?: (value: string) => void
+  onFocus?: () => void
   innerRef?: RefObject<HTMLInputElement>
   overBalance?: boolean
   sign?: string
 }
 
-function BareMoneyInput({ className, placeholder, onChange, value, innerRef, sign }: Props) {
+function BareMoneyInput({ className, placeholder, onChange, onFocus, value, innerRef, sign }: Props) {
   function allowOnlyTwoDecimals(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
     const dotSplitted = value.split(".")
@@ -35,6 +36,7 @@ function BareMoneyInput({ className, placeholder, onChange, value, innerRef, sig
   const passProps = {
     className,
     placeholder,
+    onFocus,
     ref: innerRef,
   }
 

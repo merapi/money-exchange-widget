@@ -1,11 +1,63 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import useInterval from "hooks/useInterval"
 import Pocket from "components/Pocket"
 import styled from "styled-components";
 
-function ExchangeScreen() {
-  const pocketFromBalance = '500.00'
+const FX_FETCH_INTERVAL = 5 * 1000
+
+interface Accounts {
+  [currency: string]: number,
+}
+
+interface Rates {
+  [currency: string]: number,
+}
+
+interface Props {
+  accounts: Accounts | null,
+}
+
+function ExchangeScreen({ accounts }: Props) {
+  const [rates, setRates] = useState<Rates | null>(null)
+
+  const [currencyFrom, setCurrencyFrom] = useState('USD')
+  const [currencyTo, setCurrencyTo] = useState('PLN')
+
+  const [activePocket, setActivePocket] = useState(currencyFrom)
+
   const [pocketFromAmount, setPocketFromAmount] = useState('')
   const [pocketToAmount, setPocketToAmount] = useState('')
+
+  const [every10seconds, setEvery10seconds] = useState(0)
+
+  const pairRate = rates !== null ? rates[currencyTo] : 0
+
+  useInterval(() => {
+    setEvery10seconds(every10seconds + 1)
+  }, FX_FETCH_INTERVAL)
+
+  useEffect(() => {
+    async function loadRates() {
+      const { rates } = await fetch(`http://localhost:9000/?base=${currencyFrom}`).then(response => response.json())
+      setRates(rates)
+    }
+    loadRates()
+  }, [every10seconds])
+
+  function updatePocketsAmounts(activePocket: string) {
+    if (activePocket === currencyFrom) {
+      setPocketToAmount(pocketFromAmount ? (parseFloat(pocketFromAmount)*pairRate).toFixed(2) : '')
+    } else {
+      setPocketFromAmount(pocketToAmount ? (parseFloat(pocketToAmount)/pairRate).toFixed(2) : '')
+    }
+  }
+
+  useEffect(() => {
+    updatePocketsAmounts(activePocket)
+  }, [pairRate])
+
+  const pocketFromBalance = accounts ? accounts[currencyFrom].toFixed(2) : ''
+  const pocketToBalance = accounts ? accounts[currencyTo].toFixed(2) : ''
   const exchangePossible = !!pocketFromAmount && parseFloat(pocketFromAmount) > 0 && parseFloat(pocketFromAmount) <= parseFloat(pocketFromBalance)
 
   const onExchangeClick = () => {
@@ -18,19 +70,29 @@ function ExchangeScreen() {
   const onPocketFromChange = (value: string) => {
     if (parseFloat(value) > 9999999) return;
     setPocketFromAmount(value)
-    setPocketToAmount(value ? (parseFloat(value)*4.2816).toFixed(2) : '')
+    setPocketToAmount(value ? (parseFloat(value)*pairRate).toFixed(2) : '')
+    setActivePocket(currencyFrom)
   }
   const onPocketToChange = (value: string) => {
     if (parseFloat(value) > 9999999) return;
     setPocketToAmount(value)
-    setPocketFromAmount(value ? (parseFloat(value)/4.2816).toFixed(2) : '')
+    setPocketFromAmount(value ? (parseFloat(value)/pairRate).toFixed(2) : '')
+    setActivePocket(currencyTo)
   }
 
   const onPocketFromBalanceClick = (balance: string) => () => {
     setPocketFromAmount(balance)
+    onPocketFromChange(balance)
   }
   const onPocketToBalanceClick = (balance: string) => () => {
     setPocketToAmount(balance)
+    onPocketToChange(balance)
+  }
+
+  const onPocketFocused = (activePocket: string) => () => {
+    setActivePocket(activePocket)
+    // This is not needed for current use case, but if we want to refetch rates on active pocket change, then we need something like this
+    // updatePocketsAmounts(activePocket)
   }
 
   return (
@@ -41,8 +103,9 @@ function ExchangeScreen() {
       </Header>
       <Pocket
         onChange={onPocketFromChange}
+        onFocus={onPocketFocused(currencyFrom)}
         onBalanceClick={onPocketFromBalanceClick}
-        currency="EUR"
+        currency={currencyFrom}
         amount={pocketFromAmount}
         balance={pocketFromBalance}
         background="#0074D9"
@@ -52,10 +115,11 @@ function ExchangeScreen() {
       <ArrowDown color="#0074D9" />
       <Pocket
         onChange={onPocketToChange}
+        onFocus={onPocketFocused(currencyTo)}
         onBalanceClick={onPocketToBalanceClick}
-        currency="PLN"
+        currency={currencyTo}
         amount={pocketToAmount}
-        balance="0"
+        balance={pocketToBalance}
         background="#00468c"
       />
     </Container>

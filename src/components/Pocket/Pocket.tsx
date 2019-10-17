@@ -8,13 +8,14 @@ interface Props {
   amount: string
   balance: string
   onChange: (value: string) => void,
+  onFocus: () => void,
   onBalanceClick: (value: string) => () => void,
   focusOnLoad?: boolean
   className?: string
   background?: string
 }
 
-function BarePocket({ mainPocket, currency, amount, balance, className, onChange, onBalanceClick, focusOnLoad }: Props) {
+function BarePocket({ mainPocket, currency, amount, balance, className, onChange, onFocus, onBalanceClick, focusOnLoad }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -30,10 +31,10 @@ function BarePocket({ mainPocket, currency, amount, balance, className, onChange
     <div className={className}>
       <Row>
         <Currency>{currency}</Currency>
-        <MoneyInput overBalance={overBalance} innerRef={inputRef} sign={sign} value={amount} onChange={onChange} />
+        <MoneyInput overBalance={overBalance} innerRef={inputRef} sign={sign} value={amount} onChange={onChange} onFocus={onFocus} />
       </Row>
       <Balance overBalance={overBalance} title="Click to use this amount" onClick={onBalanceClick(balance)}>
-        You have {balance}
+        {balance ? `You have ${balance}` : `Loading...`}
       </Balance>
     </div>
   )
