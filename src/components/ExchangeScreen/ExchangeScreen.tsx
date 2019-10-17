@@ -2,31 +2,28 @@ import React, { useEffect, useState, MouseEvent, useRef } from "react"
 import useInterval from "hooks/useInterval"
 import Pocket from "components/Pocket"
 import styled from "styled-components";
+import { Accounts, Currency } from '@types'
 
 const FX_FETCH_INTERVAL = 10 * 1000
 const SUPPORTED_CURRENCIES = ['USD', 'GBP', 'EUR', 'PLN']
 
-interface Accounts {
-  [currency: string]: number,
-}
-
-interface Rates {
-  [currency: string]: number,
+type Rates = {
+  [currency in Currency]: number
 }
 
 interface Props {
   accounts: Accounts | null
-  onExchange: (from: string, to: string, amount: string, rate: number, result: string) => void
+  onExchange: (from: Currency, to: Currency, amount: string, rate: number, result: string) => void
   exchangeOngoing: boolean
 }
 
 function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
   const [rates, setRates] = useState<Rates | null>(null)
 
-  const [currencyFrom, setCurrencyFrom] = useState('USD')
-  const [currencyTo, setCurrencyTo] = useState('PLN')
+  const [currencyFrom, setCurrencyFrom] = useState<Currency>('USD')
+  const [currencyTo, setCurrencyTo] = useState<Currency>('PLN')
 
-  const [activePocket, setActivePocket] = useState(currencyFrom)
+  const [activePocket, setActivePocket] = useState<Currency>(currencyFrom)
 
   const [pocketFromAmount, setPocketFromAmount] = useState('')
   const [pocketToAmount, setPocketToAmount] = useState('')
@@ -37,7 +34,7 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
   const abortController = new window.AbortController()
 
   // for delayed responses validation (eg. now exchanging PLN but got json with USD base)
-  const refCurrencyFrom = useRef<string>()
+  const refCurrencyFrom = useRef<Currency>()
   refCurrencyFrom.current = currencyFrom;
 
   const pairRate = rates !== null ? rates[currencyTo] : 0
@@ -47,7 +44,7 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
   }, FX_FETCH_INTERVAL, resetTimer)
 
   useEffect(() => {
-    async function loadRates(c: string) {
+    async function loadRates() {
       try {
         const { rates, base } = await fetch(`http://localhost:9000/?base=${currencyFrom}`, { signal: abortController.signal }).then(response => response.json())
         if (base === refCurrencyFrom.current) {
@@ -61,11 +58,11 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
         throw error
       }
     }
-    loadRates(currencyFrom)
+    loadRates()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [every10seconds, currencyFrom])
 
-  function updatePocketsAmounts(activePocket: string) {
+  function updatePocketsAmounts(activePocket: Currency) {
     if (activePocket === currencyFrom) {
       setPocketToAmount(pocketFromAmount ? (parseFloat(pocketFromAmount)*pairRate).toFixed(2) : '')
     } else {
@@ -114,13 +111,13 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
     onPocketToChange(balance)
   }
 
-  const onPocketFocused = (activePocket: string) => () => {
+  const onPocketFocused = (activePocket: Currency) => () => {
     setActivePocket(activePocket)
     // This is not needed for current use case, but if we want to refetch rates on active pocket change, then we need something like this
     // updatePocketsAmounts(activePocket)
   }
 
-  const changeCurrency = (setCurrencyFunction: (currency: string) => void, currency: string, isMainPocket: boolean) => (event: MouseEvent<HTMLElement>) => {
+  const changeCurrency = (setCurrencyFunction: (currency: Currency) => void, currency: Currency, isMainPocket: boolean) => (event: MouseEvent<HTMLElement>) => {
     setCurrencyFunction(currency)
     if (isMainPocket) {
       setActivePocket(currency)
@@ -130,10 +127,10 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
     }
   }
 
-  function renderCurrenriesList(currentCurrency: string, setCurrencyFunction: (currency: string) => void, isMainPocket: boolean = false) {
+  function renderCurrenriesList(currentCurrency: string, setCurrencyFunction: (currency: Currency) => void, isMainPocket: boolean = false) {
     return (
       <CurrencySelect>{SUPPORTED_CURRENCIES.map(currency => {
-        return (<CurrencyOption key={currency} active={currency === currentCurrency} onClick={changeCurrency(setCurrencyFunction, currency, isMainPocket)}>{currency}</CurrencyOption>)
+        return (<CurrencyOption key={currency} active={currency === currentCurrency} onClick={changeCurrency(setCurrencyFunction, currency as Currency, isMainPocket)}>{currency}</CurrencyOption>)
       })}</CurrencySelect>
     )
   }

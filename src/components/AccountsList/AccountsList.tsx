@@ -1,21 +1,18 @@
 import React from "react"
 import styled from "styled-components";
-
-interface Accounts {
-  [currency: string]: number,
-}
+import { Accounts, Currency } from '@types'
 
 interface Props {
   accounts: Accounts | null,
   className?: string,
 }
 
-const BareAccounts = ({ accounts, className }: Props) => {
+const BareAccountsList = ({ accounts, className }: Props) => {
 
   function listAccounts(accounts: Accounts) {
     return Object.keys(accounts).map(currency => {
       return (
-        <div key={currency}>{currency}: {accounts[currency]}</div>
+        <div key={currency}>{currency}: {accounts[currency as Currency]}</div>
       )
     })
   }
@@ -28,8 +25,8 @@ const BareAccounts = ({ accounts, className }: Props) => {
   )
 }
 
-const Accounts = styled(BareAccounts)`
+const AccountsList = styled(BareAccountsList)`
   margin: 10px;
 `
 
-export default Accounts
+export default AccountsList
