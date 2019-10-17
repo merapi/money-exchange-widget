@@ -1,3 +1,5 @@
+![alt text](https://s3.gifyu.com/images/exchangeFlow.gif)
+
 ### Install & run the project:
 
 1. `yarn` or `npm i`
