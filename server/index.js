@@ -4,7 +4,13 @@ const got = require('got')
 const app = express()
 const port = 9000
 
+const RESPONSE_DELAY = 1000 * 2
+
 app.use(cors())
+
+app.use((req, res, next) => {
+  setTimeout(() => next(), RESPONSE_DELAY);
+});
 
 let accounts = {
   USD: 1000,
@@ -56,7 +62,7 @@ app.get('/', async (req, res) => {
   const fxJson = await got(`https://api.exchangeratesapi.io/latest${path}`).then(response => JSON.parse(response.body))
   for (currency in fxJson.rates) {
     if (currency !== qs.base) {
-      fxJson.rates[currency] = fxJson.rates[currency] * (Math.random() * (1.05 - 0.95) + 0.95) // change rate by max 5%
+      fxJson.rates[currency] = fxJson.rates[currency] * (Math.random() * (1.01 - 0.99) + 0.99) // change rate by max 1%
     }
   }
   console.log(`💹 New FX rates`, fxJson)
