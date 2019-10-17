@@ -21,3 +21,4 @@ On every currency change in the main Pocket it will cancel old requests, reset t
 Todo:
 - Better money handling (Dinero etc.)
 - Tests (react-testing-library + E2E Cypress)
+- Better amount length control (wider input?)
