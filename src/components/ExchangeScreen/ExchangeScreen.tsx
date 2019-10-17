@@ -62,6 +62,7 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
       }
     }
     loadRates(currencyFrom)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [every10seconds, currencyFrom])
 
   function updatePocketsAmounts(activePocket: string) {
@@ -73,8 +74,8 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
   }
 
   useEffect(() => {
-    console.log(`updatePocketsAmounts`)
     updatePocketsAmounts(activePocket)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairRate])
 
   const pocketFromBalance = accounts ? accounts[currencyFrom].toFixed(2) : ''
