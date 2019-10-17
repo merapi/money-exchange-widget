@@ -15,11 +15,12 @@ interface Rates {
 }
 
 interface Props {
-  accounts: Accounts | null,
+  accounts: Accounts | null
   onExchange: (from: string, to: string, amount: string, rate: number, result: string) => void
+  exchangeOngoing: boolean
 }
 
-function ExchangeScreen({ accounts, onExchange }: Props) {
+function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
   const [rates, setRates] = useState<Rates | null>(null)
 
   const [currencyFrom, setCurrencyFrom] = useState('USD')
@@ -140,7 +141,7 @@ function ExchangeScreen({ accounts, onExchange }: Props) {
     <Container>
       <Header>
         <Button onClick={onCancelClick} background="#282c34" hoverBackground="#3b3e45">Cancel</Button>
-        <Button disabled={!exchangePossible} onClick={onExchangeClick} background="#0074D9" hoverBackground="#2499ff">Exchange</Button>
+        <Button disabled={!exchangePossible || exchangeOngoing} onClick={onExchangeClick} background="#0074D9" hoverBackground="#2499ff">{exchangeOngoing ? 'Exchanging...' : 'Exchange'}</Button>
       </Header>
       <Pocket
         onChange={onPocketFromChange}
