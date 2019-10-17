@@ -18,10 +18,24 @@ const App: React.FC = () => {
     loadAccounts()
   }, [])
 
+  async function onExchange(from: string, to: string, amount: string, rate: number, result: string) {
+    try {
+      const responseJson: Accounts = await fetch(`http://localhost:9000/exchange?from=${from}&to=${to}&amount=${amount}&rate=${rate}&result=${result}`).then(response => response.json())
+      if ('error' in responseJson) {
+        alert(responseJson.error)
+      } else {
+        setAccounts(responseJson)
+      }
+      return true
+    } catch(e) {
+      return false
+    }
+  }
+
   return (
     <React.Fragment>
       <GlobalStyle />
-      <ExchangeScreen accounts={accounts}  />
+      <ExchangeScreen accounts={accounts} onExchange={onExchange} />
       <AccountsList accounts={accounts} />
     </React.Fragment>
   );

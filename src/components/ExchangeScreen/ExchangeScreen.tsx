@@ -15,9 +15,10 @@ interface Rates {
 
 interface Props {
   accounts: Accounts | null,
+  onExchange: (from: string, to: string, amount: string, rate: number, result: string) => void
 }
 
-function ExchangeScreen({ accounts }: Props) {
+function ExchangeScreen({ accounts, onExchange }: Props) {
   const [rates, setRates] = useState<Rates | null>(null)
 
   const [currencyFrom, setCurrencyFrom] = useState('USD')
@@ -61,7 +62,10 @@ function ExchangeScreen({ accounts }: Props) {
   const exchangePossible = !!pocketFromAmount && parseFloat(pocketFromAmount) > 0 && parseFloat(pocketFromAmount) <= parseFloat(pocketFromBalance)
 
   const onExchangeClick = () => {
-    alert('API call')
+    if (onExchange) {
+      const result = onExchange(currencyFrom, currencyTo, pocketFromAmount, pairRate, pocketToAmount)
+      console.log(`onExchange result`, result)
+    }
   }
   const onCancelClick = () => {
     alert('Go back')
