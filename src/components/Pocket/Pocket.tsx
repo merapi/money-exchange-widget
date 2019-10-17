@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { ReactElement, useEffect, useRef } from "react"
 import styled from "styled-components";
 import MoneyInput from "components/MoneyInput";
 
@@ -13,9 +13,10 @@ interface Props {
   focusOnLoad?: boolean
   className?: string
   background?: string
+  footerComponent: ReactElement
 }
 
-function BarePocket({ mainPocket, currency, amount, balance, className, onChange, onFocus, onBalanceClick, focusOnLoad }: Props) {
+function BarePocket({ mainPocket, currency, amount, balance, className, onChange, onFocus, onBalanceClick, focusOnLoad, footerComponent }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -36,6 +37,7 @@ function BarePocket({ mainPocket, currency, amount, balance, className, onChange
       <Balance overBalance={overBalance} title="Click to use this amount" onClick={onBalanceClick(balance)}>
         {balance ? `You have ${balance}` : `Loading...`}
       </Balance>
+      {footerComponent}
     </div>
   )
 }

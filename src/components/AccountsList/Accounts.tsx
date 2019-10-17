@@ -22,6 +22,7 @@ const BareAccounts = ({ accounts, className }: Props) => {
 
   return (
     <div className={className}>
+      <div>Raw accounts from server:</div>
       {accounts !== null ? listAccounts(accounts) : 'Loading...'}
     </div>
   )
