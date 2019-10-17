@@ -24,7 +24,6 @@ function BareMoneyInput({ className, placeholder, onChange, onFocus, value, inne
   }
 
   function allowOnlyNumbersAndDot(event: KeyboardEvent) {
-    console.log(event.keyCode, event.which, event.key, event.shiftKey)
     if (
       event.shiftKey ||
       (
