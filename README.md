@@ -25,3 +25,6 @@ Todo:
 - Better money handling (Dinero etc.) - on the server
 - Tests (react-testing-library + E2E Cypress)
 - Better amount length control (wider input?)
+- Live data (WebSockets?) to update accounts balances and fx rates
+- Swipe left/right to change the currency (on touch devices)
+- Display exchange rate of 1 unit
