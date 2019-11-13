@@ -21,6 +21,18 @@
     "start": "react-scripts start",
     "test": "react-scripts test"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc --noEmit && lint-staged && npm test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "npm run lint",
+      "npm run format",
+      "git add"
+    ]
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -53,6 +65,8 @@
     "eslint-plugin-react": "^7.16.0",
     "express": "^4.17.1",
     "got": "^9.6.0",
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2",
     "prettier": "^1.19.1"
   }
 }
