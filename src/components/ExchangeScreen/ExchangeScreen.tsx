@@ -1,7 +1,7 @@
-import React, { useEffect, useState, MouseEvent, useRef } from "react"
-import useInterval from "hooks/useInterval"
-import Pocket from "components/Pocket"
-import styled from "styled-components";
+import React, { useEffect, useState, useRef } from 'react'
+import useInterval from 'hooks/useInterval'
+import Pocket from 'components/Pocket'
+import styled from 'styled-components'
 import { Accounts, Currency } from '@types'
 
 const FX_FETCH_INTERVAL = 10 * 1000
@@ -35,22 +35,28 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
 
   // for delayed responses validation (eg. now exchanging PLN but got json with USD base)
   const refCurrencyFrom = useRef<Currency>()
-  refCurrencyFrom.current = currencyFrom;
+  refCurrencyFrom.current = currencyFrom
 
   const pairRate = rates !== null ? rates[currencyTo] : 0
 
-  useInterval(() => {
-    setEvery10seconds(every10seconds + 1)
-  }, FX_FETCH_INTERVAL, resetTimer)
+  useInterval(
+    () => {
+      setEvery10seconds(every10seconds + 1)
+    },
+    FX_FETCH_INTERVAL,
+    resetTimer,
+  )
 
   useEffect(() => {
     async function loadRates() {
       try {
-        const { rates, base } = await fetch(`http://localhost:9000/?base=${currencyFrom}`, { signal: abortController.signal }).then(response => response.json())
+        const { rates, base } = await fetch(`http://localhost:9000/?base=${currencyFrom}`, {
+          signal: abortController.signal,
+        }).then(response => response.json())
         if (base === refCurrencyFrom.current) {
           setRates(rates)
         }
-      } catch(error) {
+      } catch (error) {
         if (error.name === 'AbortError') {
           console.log(`${currencyFrom} fx request aborted, now ${refCurrencyFrom.current}`)
           return
@@ -59,30 +65,31 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
       }
     }
     loadRates()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [every10seconds, currencyFrom])
 
   function updatePocketsAmounts(activePocket: Currency) {
     if (activePocket === currencyFrom) {
-      setPocketToAmount(pocketFromAmount ? (parseFloat(pocketFromAmount)*pairRate).toFixed(2) : '')
+      setPocketToAmount(pocketFromAmount ? (parseFloat(pocketFromAmount) * pairRate).toFixed(2) : '')
     } else {
-      setPocketFromAmount(pocketToAmount ? (parseFloat(pocketToAmount)/pairRate).toFixed(2) : '')
+      setPocketFromAmount(pocketToAmount ? (parseFloat(pocketToAmount) / pairRate).toFixed(2) : '')
     }
   }
 
   useEffect(() => {
     updatePocketsAmounts(activePocket)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairRate])
 
   const pocketFromBalance = accounts ? accounts[currencyFrom].toFixed(2) : ''
   const pocketToBalance = accounts ? accounts[currencyTo].toFixed(2) : ''
-  const exchangePossible = !!pocketFromAmount && parseFloat(pocketFromAmount) > 0 && parseFloat(pocketFromAmount) <= parseFloat(pocketFromBalance)
+  const exchangePossible =
+    !!pocketFromAmount &&
+    parseFloat(pocketFromAmount) > 0 &&
+    parseFloat(pocketFromAmount) <= parseFloat(pocketFromBalance)
 
   const onExchangeClick = () => {
     if (onExchange) {
       const result = onExchange(currencyFrom, currencyTo, pocketFromAmount, pairRate, pocketToAmount)
-      console.log(`onExchange result`, result)
+      console.log('onExchange result', result)
     }
   }
   const onCancelClick = () => {
@@ -92,13 +99,13 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
   const onPocketFromChange = (value: string) => {
     if (parseFloat(value) > 9999999) return
     setPocketFromAmount(value)
-    setPocketToAmount(value ? (parseFloat(value)*pairRate).toFixed(2) : '')
+    setPocketToAmount(value ? (parseFloat(value) * pairRate).toFixed(2) : '')
     setActivePocket(currencyFrom)
   }
   const onPocketToChange = (value: string) => {
     if (parseFloat(value) > 9999999) return
     setPocketToAmount(value)
-    setPocketFromAmount(value ? (parseFloat(value)/pairRate).toFixed(2) : '')
+    setPocketFromAmount(value ? (parseFloat(value) / pairRate).toFixed(2) : '')
     setActivePocket(currencyTo)
   }
 
@@ -117,7 +124,11 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
     // updatePocketsAmounts(activePocket)
   }
 
-  const changeCurrency = (setCurrencyFunction: (currency: Currency) => void, currency: Currency, isMainPocket: boolean) => (event: MouseEvent<HTMLElement>) => {
+  const changeCurrency = (
+    setCurrencyFunction: (currency: Currency) => void,
+    currency: Currency,
+    isMainPocket: boolean,
+  ) => () => {
     setCurrencyFunction(currency)
     if (isMainPocket) {
       setActivePocket(currency)
@@ -127,19 +138,42 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
     }
   }
 
-  function renderCurrenriesList(currentCurrency: string, setCurrencyFunction: (currency: Currency) => void, isMainPocket: boolean = false) {
+  function renderCurrenriesList(
+    currentCurrency: string,
+    setCurrencyFunction: (currency: Currency) => void,
+    isMainPocket = false,
+  ) {
     return (
-      <CurrencySelect>{SUPPORTED_CURRENCIES.map(currency => {
-        return (<CurrencyOption key={currency} active={currency === currentCurrency} onClick={changeCurrency(setCurrencyFunction, currency as Currency, isMainPocket)}>{currency}</CurrencyOption>)
-      })}</CurrencySelect>
+      <CurrencySelect>
+        {SUPPORTED_CURRENCIES.map(currency => {
+          return (
+            <CurrencyOption
+              key={currency}
+              active={currency === currentCurrency}
+              onClick={changeCurrency(setCurrencyFunction, currency as Currency, isMainPocket)}
+            >
+              {currency}
+            </CurrencyOption>
+          )
+        })}
+      </CurrencySelect>
     )
   }
 
   return (
     <Container>
       <Header>
-        <Button onClick={onCancelClick} background="#282c34" hoverBackground="#3b3e45">Cancel</Button>
-        <Button disabled={!exchangePossible || exchangeOngoing} onClick={onExchangeClick} background="#0074D9" hoverBackground="#2499ff">{exchangeOngoing ? 'Exchanging...' : 'Exchange'}</Button>
+        <Button onClick={onCancelClick} background="#282c34" hoverBackground="#3b3e45">
+          Cancel
+        </Button>
+        <Button
+          disabled={!exchangePossible || exchangeOngoing}
+          onClick={onExchangeClick}
+          background="#0074D9"
+          hoverBackground="#2499ff"
+        >
+          {exchangeOngoing ? 'Exchanging...' : 'Exchange'}
+        </Button>
       </Header>
       <Pocket
         onChange={onPocketFromChange}
@@ -179,26 +213,26 @@ const Header = styled.div`
   margin-bottom: 10px;
 `
 
-const Button = styled.button<{ background: string, hoverBackground: string }>`
+const Button = styled.button<{ background: string; hoverBackground: string }>`
   padding: 5px 10px;
   font-size: 16px;
   background: ${({ background }) => background};
   border: 0;
   border-radius: 5px;
   color: #efefef;
-  cursor: ${({ disabled }) => disabled ? `not-allowed` : `pointer`};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   &:hover {
     background: ${({ hoverBackground, disabled }) => !disabled && hoverBackground};
   }
-  ${({ disabled }) => disabled ? `opacity: 0.4;` : ``}
+  ${({ disabled }) => (disabled ? 'opacity: 0.4;' : '')}
 `
 
 const ArrowDown = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   border-top: 15px solid ${({ color }) => color};
@@ -211,8 +245,8 @@ const CurrencySelect = styled.div`
 `
 const CurrencyOption = styled.div<{ active: boolean }>`
   margin-right: 10px;
-  cursor: ${({ active }) => active ? 'default' : 'pointer'}
-  opacity: ${({ active }) => active ? 1 : 0.5}
+  cursor: ${({ active }) => (active ? 'default' : 'pointer')}
+  opacity: ${({ active }) => (active ? 1 : 0.5)}
 `
 
 export default ExchangeScreen

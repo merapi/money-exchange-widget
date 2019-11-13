@@ -1,1 +1,1 @@
-export { default } from "./ExchangeScreen"
+export { default } from './ExchangeScreen'

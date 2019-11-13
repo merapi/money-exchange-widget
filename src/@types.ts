@@ -1,6 +1,5 @@
-export type Currency = "USD" | "GBP" | "EUR" | "PLN"
+export type Currency = 'USD' | 'GBP' | 'EUR' | 'PLN'
 
 export type Accounts = {
-  [currency in Currency]: number;
-};
-
+  [currency in Currency]: number
+}

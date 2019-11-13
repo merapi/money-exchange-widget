@@ -1,5 +1,5 @@
-import React, { KeyboardEvent, ChangeEvent, RefObject } from "react"
-import styled from "styled-components"
+import React, { KeyboardEvent, ChangeEvent, RefObject } from 'react'
+import styled from 'styled-components'
 
 interface Props {
   className?: string
@@ -15,9 +15,12 @@ interface Props {
 function BareMoneyInput({ className, placeholder, onChange, onFocus, value, innerRef, sign }: Props) {
   function allowOnlyTwoDecimals(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
-    const dotSplitted = value.split(".")
-    if (dotSplitted.length === 1 || (dotSplitted.length === 2 && dotSplitted[1].length <= 2 && dotSplitted[0].length > 0)) {
-      if (typeof onChange === "function") {
+    const dotSplitted = value.split('.')
+    if (
+      dotSplitted.length === 1 ||
+      (dotSplitted.length === 2 && dotSplitted[1].length <= 2 && dotSplitted[0].length > 0)
+    ) {
+      if (typeof onChange === 'function') {
         onChange(value)
       }
     }
@@ -26,11 +29,9 @@ function BareMoneyInput({ className, placeholder, onChange, onFocus, value, inne
   function allowOnlyNumbersAndDot(event: KeyboardEvent) {
     if (
       event.shiftKey ||
-      (
-        ![46, 8, 9, 190].includes(event.keyCode) && // allow special keys: delete = 46, backspace = 8, tab = 9, . = 190
-        (event.keyCode < 48 || event.keyCode > 57) && // allow numbers: 0 = 48, 9 = 57
-        !((event.metaKey || event.ctrlKey) && [65, 67, 86, 88].includes(event.keyCode)) // allow select/copy/paste/cut
-      )
+      (![46, 8, 9, 190].includes(event.keyCode) && // allow special keys: delete = 46, backspace = 8, tab = 9, . = 190
+      (event.keyCode < 48 || event.keyCode > 57) && // allow numbers: 0 = 48, 9 = 57
+        !((event.metaKey || event.ctrlKey) && [65, 67, 86, 88].includes(event.keyCode))) // allow select/copy/paste/cut
     ) {
       event.preventDefault()
     }
@@ -45,8 +46,20 @@ function BareMoneyInput({ className, placeholder, onChange, onFocus, value, inne
 
   return (
     <Container>
-      {value ? <Sign>{sign}<Invisible>{value}</Invisible></Sign> : null}
-      <input {...passProps} placeholder="0" type="text" value={value} onChange={allowOnlyTwoDecimals} onKeyDown={allowOnlyNumbersAndDot} />
+      {value ? (
+        <Sign>
+          {sign}
+          <Invisible>{value}</Invisible>
+        </Sign>
+      ) : null}
+      <input
+        {...passProps}
+        placeholder="0"
+        type="text"
+        value={value}
+        onChange={allowOnlyTwoDecimals}
+        onKeyDown={allowOnlyNumbersAndDot}
+      />
     </Container>
   )
 }
@@ -86,10 +99,13 @@ const MoneyInput = styled(BareMoneyInput)`
     text-decoration-color: #699cc7;
     outline: none;
   }
-  ${({ overBalance }) => overBalance ? `
+  ${({ overBalance }) =>
+    overBalance
+      ? `
     text-decoration-line: underline !important;
     text-decoration-color: red !important;
-  ` : ``}
+  `
+      : ''}
 `
 
 export default MoneyInput

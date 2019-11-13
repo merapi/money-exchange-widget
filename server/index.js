@@ -9,8 +9,8 @@ const RESPONSE_DELAY = 1000 * 2
 app.use(cors())
 
 app.use((req, res, next) => {
-  setTimeout(() => next(), RESPONSE_DELAY);
-});
+  setTimeout(() => next(), RESPONSE_DELAY)
+})
 
 let accounts = {
   USD: 1000,
@@ -22,8 +22,8 @@ let accounts = {
 let fxJson = {
   base: 'USD',
   rates: {
-    'USD': 1
-  }
+    USD: 1,
+  },
 }
 
 app.get('/accounts', async (req, res) => {
@@ -42,7 +42,7 @@ app.get('/exchange', async (req, res) => {
   console.log(`💱 New exchange ${qs.amount} ${qs.from} to ${toAmount} ${qs.to}, rate ${rate}`)
 
   if (accounts[qs.from] - fromAmount < 0) {
-    const error = `🚫 Not enough money`
+    const error = '🚫 Not enough money'
     console.error(error)
     console.log()
     return res.json({ error })
@@ -51,7 +51,7 @@ app.get('/exchange', async (req, res) => {
   accounts[qs.from] -= fromAmount
   accounts[qs.to] += toAmount
 
-  console.log(`✅ Exchange success, updated accounts 💰:`, accounts)
+  console.log('✅ Exchange success, updated accounts 💰:', accounts)
   console.log()
   res.json(accounts)
 })
@@ -65,13 +65,13 @@ app.get('/', async (req, res) => {
       fxJson.rates[currency] = fxJson.rates[currency] * (Math.random() * (1.01 - 0.99) + 0.99) // change rate by max 1%
     }
   }
-  console.log(`💹 New FX rates`, fxJson)
+  console.log('💹 New FX rates', fxJson)
   console.log()
   res.json(fxJson)
 })
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
-  console.log(`💰 Fresh accounts:`, accounts)
+  console.log('💰 Fresh accounts:', accounts)
   console.log()
 })

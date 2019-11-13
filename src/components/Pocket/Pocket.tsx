@@ -1,29 +1,40 @@
-import React, { ReactElement, useEffect, useRef } from "react"
-import styled from "styled-components";
-import MoneyInput from "components/MoneyInput";
+import React, { ReactElement, useEffect, useRef } from 'react'
+import styled from 'styled-components'
+import MoneyInput from 'components/MoneyInput'
 
 interface Props {
   mainPocket?: boolean
   currency: string
   amount: string
   balance: string
-  onChange: (value: string) => void,
-  onFocus: () => void,
-  onBalanceClick: (value: string) => () => void,
+  onChange: (value: string) => void
+  onFocus: () => void
+  onBalanceClick: (value: string) => () => void
   focusOnLoad?: boolean
   className?: string
   background?: string
   footerComponent: ReactElement
 }
 
-function BarePocket({ mainPocket, currency, amount, balance, className, onChange, onFocus, onBalanceClick, focusOnLoad, footerComponent }: Props) {
+function BarePocket({
+  mainPocket,
+  currency,
+  amount,
+  balance,
+  className,
+  onChange,
+  onFocus,
+  onBalanceClick,
+  focusOnLoad,
+  footerComponent,
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (focusOnLoad && inputRef && inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus()
     }
-  }, [focusOnLoad]);
+  }, [focusOnLoad])
 
   const sign = mainPocket ? '-' : '+'
   const overBalance = mainPocket && parseFloat(amount) > parseFloat(balance)
@@ -32,10 +43,17 @@ function BarePocket({ mainPocket, currency, amount, balance, className, onChange
     <div className={className}>
       <Row>
         <Currency>{currency}</Currency>
-        <MoneyInput overBalance={overBalance} innerRef={inputRef} sign={sign} value={amount} onChange={onChange} onFocus={onFocus} />
+        <MoneyInput
+          overBalance={overBalance}
+          innerRef={inputRef}
+          sign={sign}
+          value={amount}
+          onChange={onChange}
+          onFocus={onFocus}
+        />
       </Row>
       <Balance overBalance={overBalance} title="Click to use this amount" onClick={onBalanceClick(balance)}>
-        {balance ? `You have ${balance}` : `Loading...`}
+        {balance ? `You have ${balance}` : 'Loading...'}
       </Balance>
       {footerComponent}
     </div>
@@ -46,7 +64,7 @@ const Pocket = styled(BarePocket)`
   background: ${({ background }) => background};
   padding: 20px;
   border-radius: 5px;
-// overflow: hidden;
+  // overflow: hidden;
 `
 
 const Currency = styled.div`
@@ -55,8 +73,8 @@ const Currency = styled.div`
 `
 
 const Balance = styled.span<{ overBalance?: boolean }>`
-  color: ${({ overBalance }) => overBalance ? `red` : `#94bce0`};
-  ${({ overBalance }) => overBalance ? `font-weight: 700` : ``};
+  color: ${({ overBalance }) => (overBalance ? 'red' : '#94bce0')};
+  ${({ overBalance }) => (overBalance ? 'font-weight: 700' : '')};
   cursor: pointer;
 `
 
