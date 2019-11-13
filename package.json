@@ -3,11 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.19",
-    "@types/node": "12.11.1",
-    "@types/react": "16.9.9",
-    "@types/react-dom": "16.9.2",
-    "@types/styled-components": "^4.1.19",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-scripts": "3.2.0",
@@ -15,11 +10,13 @@
     "typescript": "3.6.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "server": "node server/index.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier '*/**/*.{js,ts,tsx}' --write ",
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix",
+    "server": "node server/index.js",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,8 +34,19 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "24.0.19",
+    "@types/node": "12.11.1",
+    "@types/react": "16.9.9",
+    "@types/react-dom": "16.9.2",
+    "@types/styled-components": "^4.1.19",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
     "cors": "^2.8.5",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-react": "^7.16.0",
     "express": "^4.17.1",
-    "got": "^9.6.0"
+    "got": "^9.6.0",
+    "prettier": "^1.19.1"
   }
 }
