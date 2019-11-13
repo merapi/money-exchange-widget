@@ -1,15 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react'
-import useInterval from 'hooks/useInterval'
+import React, { useEffect, useState } from 'react'
 import Pocket from 'components/Pocket'
 import styled from 'styled-components'
 import { Accounts, Currency } from '@types'
-
-const FX_FETCH_INTERVAL = 10 * 1000
-const SUPPORTED_CURRENCIES = ['USD', 'GBP', 'EUR', 'PLN']
-
-type Rates = {
-  [currency in Currency]: number
-}
+import { SUPPORTED_CURRENCIES } from 'config/consts'
+import { useSelector, useDispatch } from 'react-redux'
+import * as ratesSelectors from 'store/rates/selectors'
 
 interface Props {
   accounts: Accounts | null
@@ -18,7 +13,9 @@ interface Props {
 }
 
 function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
-  const [rates, setRates] = useState<Rates | null>(null)
+  const rates = useSelector(ratesSelectors.rates)
+  const store = useSelector(state => state) // for quick debugging TODO: remove
+  const dispatch = useDispatch()
 
   const [currencyFrom, setCurrencyFrom] = useState<Currency>('USD')
   const [currencyTo, setCurrencyTo] = useState<Currency>('PLN')
@@ -28,44 +25,10 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
   const [pocketFromAmount, setPocketFromAmount] = useState('')
   const [pocketToAmount, setPocketToAmount] = useState('')
 
-  const [every10seconds, setEvery10seconds] = useState(0)
-
   const [resetTimer, setResetTimer] = useState(0)
   const abortController = new window.AbortController()
 
-  // for delayed responses validation (eg. now exchanging PLN but got json with USD base)
-  const refCurrencyFrom = useRef<Currency>()
-  refCurrencyFrom.current = currencyFrom
-
-  const pairRate = rates !== null ? rates[currencyTo] : 0
-
-  useInterval(
-    () => {
-      setEvery10seconds(every10seconds + 1)
-    },
-    FX_FETCH_INTERVAL,
-    resetTimer,
-  )
-
-  useEffect(() => {
-    async function loadRates() {
-      try {
-        const { rates, base } = await fetch(`http://localhost:9000/?base=${currencyFrom}`, {
-          signal: abortController.signal,
-        }).then(response => response.json())
-        if (base === refCurrencyFrom.current) {
-          setRates(rates)
-        }
-      } catch (error) {
-        if (error.name === 'AbortError') {
-          console.log(`${currencyFrom} fx request aborted, now ${refCurrencyFrom.current}`)
-          return
-        }
-        throw error
-      }
-    }
-    loadRates()
-  }, [every10seconds, currencyFrom])
+  const pairRate = rates[currencyTo] || 0
 
   function updatePocketsAmounts(activePocket: Currency) {
     if (activePocket === currencyFrom) {
@@ -162,6 +125,7 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
 
   return (
     <Container>
+      {process.env.NODE_ENV === 'development' && <pre>{JSON.stringify(store, null, 2)}</pre>}
       <Header>
         <Button onClick={onCancelClick} background="#282c34" hoverBackground="#3b3e45">
           Cancel
