@@ -5,6 +5,7 @@ export enum RatesActionsConsts {
   LOOP_FETCH_RATES = 'LOOP_FETCH_RATES',
   FETCH_RATES = 'FETCH_RATES',
   FETCH_RATES_SUCCESS = 'FETCH_RATES_SUCCESS',
+  FETCH_RATES_ERROR = 'FETCH_RATES_ERROR',
 }
 
 // Action types
@@ -21,6 +22,11 @@ export interface FetchRatesSuccess {
   type: RatesActionsConsts.FETCH_RATES_SUCCESS
   baseCurrency: Currency
   rates: Rate
+}
+
+export interface FetchRatesError {
+  type: RatesActionsConsts.FETCH_RATES_ERROR
+  error: Error
 }
 
 export type RatesActions = LoopFetchRates | FetchRates | FetchRatesSuccess

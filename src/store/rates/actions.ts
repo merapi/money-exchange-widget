@@ -1,4 +1,4 @@
-import { Rate, RatesActionsConsts, FetchRates, LoopFetchRates, FetchRatesSuccess } from './types'
+import { Rate, RatesActionsConsts, FetchRates, LoopFetchRates, FetchRatesSuccess, FetchRatesError } from './types'
 import { Currency } from 'store/types'
 
 export const loopFetchRates = (): LoopFetchRates => ({
@@ -14,4 +14,9 @@ export const fetchRatesSuccess = (baseCurrency: Currency, rates: Rate): FetchRat
   type: RatesActionsConsts.FETCH_RATES_SUCCESS,
   baseCurrency,
   rates,
+})
+
+export const fetchRatesError = (error: Error): FetchRatesError => ({
+  type: RatesActionsConsts.FETCH_RATES_ERROR,
+  error,
 })

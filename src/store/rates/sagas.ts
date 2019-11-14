@@ -19,6 +19,7 @@ export function* fetchRates(action: FetchRates) {
     const response: FetchRatesResponse = yield call(Api.finance.fetchRates, baseCurrency, abortController)
     yield put(actions.fetchRatesSuccess(response.base, response.rates))
   } catch (e) {
+    yield put(actions.fetchRatesError(e))
     console.error(`fetchRates`, e)
   } finally {
     if (yield cancelled()) {
