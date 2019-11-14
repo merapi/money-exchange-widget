@@ -28,8 +28,9 @@ function BareMoneyInput({ className, placeholder, onChange, onFocus, value, inne
 
   function allowOnlyNumbersAndDot(event: KeyboardEvent) {
     if (
-      event.shiftKey ||
-      (![46, 8, 9, 190].includes(event.keyCode) && // allow special keys: delete = 46, backspace = 8, tab = 9, . = 190
+      (event.shiftKey && event.keyCode !== 9) ||
+      (![37, 38, 39, 40].includes(event.keyCode) && // allow arrows
+      ![46, 8, 9, 190].includes(event.keyCode) && // allow special keys: delete = 46, backspace = 8, tab = 9, . = 190
       (event.keyCode < 48 || event.keyCode > 57) && // allow numbers: 0 = 48, 9 = 57
         !((event.metaKey || event.ctrlKey) && [65, 67, 86, 88].includes(event.keyCode))) // allow select/copy/paste/cut
     ) {
