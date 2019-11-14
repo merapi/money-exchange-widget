@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import Pocket from 'components/Pocket'
 import styled from 'styled-components'
-import { Accounts, Currency } from '@types'
+import { Currency } from 'store/types'
 import { SUPPORTED_CURRENCIES } from 'config/consts'
 import { useSelector, useDispatch } from 'react-redux'
 import * as ratesSelectors from 'store/rates/selectors'
 import * as ratesActions from 'store/rates/actions'
+import * as accountSelectors from 'store/accounts/selectors'
 
 interface Props {
-  accounts: Accounts | null
   onExchange: (from: Currency, to: Currency, amount: string, rate: number, result: string) => void
   exchangeOngoing: boolean
 }
 
-function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
+function ExchangeScreen({ onExchange, exchangeOngoing }: Props) {
+  const accounts = useSelector(accountSelectors.accounts)
   const rates = useSelector(ratesSelectors.rates)
   const store = useSelector(state => state) // for quick debugging TODO: remove
   const dispatch = useDispatch()
@@ -47,8 +48,8 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
     updatePocketsAmounts(activePocket)
   }, [pairRate])
 
-  const pocketFromBalance = accounts ? accounts[currencyFrom].toFixed(2) : ''
-  const pocketToBalance = accounts ? accounts[currencyTo].toFixed(2) : ''
+  const pocketFromBalance = accounts ? (accounts[currencyFrom] || 0).toFixed(2) : ''
+  const pocketToBalance = accounts ? (accounts[currencyTo] || 0).toFixed(2) : ''
   const exchangePossible =
     !!pocketFromAmount &&
     parseFloat(pocketFromAmount) > 0 &&

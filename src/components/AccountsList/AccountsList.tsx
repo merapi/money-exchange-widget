@@ -1,13 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Accounts, Currency } from '@types'
+import { Currency } from 'store/types'
+import { Accounts } from 'store/accounts/types'
+import * as accountSelectors from 'store/accounts/selectors'
+import { useSelector } from 'react-redux'
 
 interface Props {
-  accounts: Accounts | null
   className?: string
 }
 
-const BareAccountsList = ({ accounts, className }: Props) => {
+const BareAccountsList = ({ className }: Props) => {
+  const accounts = useSelector(accountSelectors.accounts)
+
   function listAccounts(accounts: Accounts) {
     return Object.keys(accounts).map(currency => {
       return (
