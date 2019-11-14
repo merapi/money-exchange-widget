@@ -4,6 +4,7 @@ const got = require('got')
 const app = express()
 const port = 9000
 
+const SUPPORTED_CURRENCIES = ['USD', 'GBP', 'EUR', 'PLN']
 const RESPONSE_DELAY = 1000 * 2
 
 app.use(cors())
@@ -13,10 +14,12 @@ app.use((req, res, next) => {
 })
 
 let accounts = {
-  USD: 1000,
-  GBP: 2000,
-  EUR: 3000,
-  PLN: 4000,
+  raw: {
+    USD: 1000,
+    GBP: 2000,
+    EUR: 3000,
+    PLN: 4000,
+  },
 }
 
 let fxJson = {
@@ -41,15 +44,15 @@ app.get('/exchange', async (req, res) => {
 
   console.log(`💱 New exchange ${qs.amount} ${qs.from} to ${toAmount} ${qs.to}, rate ${rate}`)
 
-  if (accounts[qs.from] - fromAmount < 0) {
+  if (accounts.raw[qs.from] - fromAmount < 0) {
     const error = '🚫 Not enough money'
     console.error(error)
     console.log()
     return res.json({ error })
   }
 
-  accounts[qs.from] -= fromAmount
-  accounts[qs.to] += toAmount
+  accounts.raw[qs.from] -= fromAmount
+  accounts.raw[qs.to] += toAmount
 
   console.log('✅ Exchange success, updated accounts 💰:', accounts)
   console.log()
@@ -59,7 +62,9 @@ app.get('/exchange', async (req, res) => {
 app.get('/', async (req, res) => {
   const qs = req.query
   const path = req.originalUrl.substring(1)
-  const fxJson = await got(`https://api.exchangeratesapi.io/latest${path}`).then(response => JSON.parse(response.body))
+  const fxJson = await got(
+    `https://api.exchangeratesapi.io/latest${path}&symbols=${SUPPORTED_CURRENCIES.join(',')}`,
+  ).then(response => JSON.parse(response.body))
   for (currency in fxJson.rates) {
     if (currency !== qs.base) {
       fxJson.rates[currency] = fxJson.rates[currency] * (Math.random() * (1.01 - 0.99) + 0.99) // change rate by max 1%
