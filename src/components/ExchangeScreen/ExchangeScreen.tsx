@@ -55,13 +55,8 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
     dispatch(pocketActions.pocketChange(pocketType, amount))
   }
 
-  const onPocketFromBalanceClick = (balance: string) => () => {
-    // setPocketFromAmount(balance)
-    // onPocketFromChange(balance)
-  }
-  const onPocketToBalanceClick = (balance: string) => () => {
-    // setPocketToAmount(balance)
-    // onPocketToChange(balance)
+  const onPocketBalanceClick = (pocketType: PocketType) => (balance: string) => () => {
+    dispatch(pocketActions.pocketChange(pocketType, balance))
   }
 
   const onPocketFocused = (pocketType: PocketType) => () => {
@@ -116,7 +111,7 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
       <Pocket
         onChange={onPocketChange(PocketType.FROM)}
         onFocus={onPocketFocused(PocketType.FROM)}
-        onBalanceClick={onPocketFromBalanceClick}
+        onBalanceClick={onPocketBalanceClick(PocketType.FROM)}
         currency={currencyFrom}
         amount={pocketFromAmount}
         balance={pocketFromBalance}
@@ -129,7 +124,7 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
       <Pocket
         onChange={onPocketChange(PocketType.TO)}
         onFocus={onPocketFocused(PocketType.TO)}
-        onBalanceClick={onPocketToBalanceClick}
+        onBalanceClick={onPocketBalanceClick(PocketType.TO)}
         currency={currencyTo}
         amount={pocketToAmount}
         balance={pocketToBalance}

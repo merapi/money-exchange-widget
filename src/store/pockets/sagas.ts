@@ -14,13 +14,17 @@ export function* pocketChange(action: PocketChange) {
     if (currency && pocket === PocketType.FROM && currentBaseCurrency !== currency) {
       yield put(pocketActions.baseCurrencyChanged(currency))
     }
-    // const currentlyFocusedPocket = yield select(selectors.focusedPocket)
 
     // if (currentlyFocusedPocket !== pocket) {
     //   yield put(actions.focusPocket(pocket))
     // }
 
     if (amount !== undefined || currency !== undefined) {
+      const currentlyFocusedPocket = yield select(pocketSelectors.focusedPocket)
+      if (pocket !== currentlyFocusedPocket) {
+        yield put(pocketActions.focusPocket(pocket))
+      }
+
       yield put(pocketActions.setPocket(pocket, amount, currency))
       // yield put(actions.calculatePockets())
     }
