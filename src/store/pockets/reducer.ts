@@ -1,4 +1,3 @@
-import { Currency } from '../types'
 import { PocketsState, PocketsActions, PocketsActionsConsts, PocketType } from './types'
 
 const initialState: PocketsState = {
@@ -7,7 +6,7 @@ const initialState: PocketsState = {
     amount: '',
   },
   to: {
-    currency: 'USD',
+    currency: 'PLN',
     amount: '',
   },
   focused: PocketType.FROM,
@@ -15,28 +14,27 @@ const initialState: PocketsState = {
 
 export default (state: PocketsState = initialState, action: PocketsActions) => {
   switch (action.type) {
-    case PocketsActionsConsts.UPDATE_POCKET: {
-      const { pocket, currency, amount } = action
-      const from = { ...state.from }
-      const to = { ...state.to }
-
-      if (pocket === PocketType.FROM) {
-        if (amount !== undefined) {
-          const amountFloat = parseFloat(amount)
-          if (amountFloat > 9999999) return state
-
-          from.amount = amount
-          const toAmount = parseFloat(amount) * 2
-          to.amount = Number.isNaN(toAmount) ? '' : toAmount.toFixed(2)
-        }
-      }
-
+    case PocketsActionsConsts.FOCUS_POCKET: {
       return {
         ...state,
-        from,
-        to,
-        focused: pocket,
+        focused: action.pocket,
       }
+    }
+
+    case PocketsActionsConsts.SET_POCKET: {
+      const { pocket, currency, amount } = action
+
+      const newState = {
+        ...state,
+      }
+      if (currency !== undefined) {
+        newState[pocket].currency = currency
+      }
+      if (amount !== undefined) {
+        newState[pocket].amount = amount
+      }
+
+      return newState
     }
   }
   return state

@@ -69,26 +69,21 @@ function ExchangeScreen({ onExchange, exchangeOngoing }: Props) {
     alert('Go back')
   }
 
-  const onPocketFromChange = (amount: string) => {
-    dispatch(pocketActions.updatePocket(PocketType.FROM, amount))
-  }
-  const onPocketToChange = (amount: string) => {
-    dispatch(pocketActions.updatePocket(PocketType.TO, amount))
+  const onPocketChange = (pocketType: PocketType) => (amount: string) => {
+    dispatch(pocketActions.pocketChange(pocketType, amount))
   }
 
   const onPocketFromBalanceClick = (balance: string) => () => {
     // setPocketFromAmount(balance)
-    onPocketFromChange(balance)
+    // onPocketFromChange(balance)
   }
   const onPocketToBalanceClick = (balance: string) => () => {
     // setPocketToAmount(balance)
-    onPocketToChange(balance)
+    // onPocketToChange(balance)
   }
 
-  const onPocketFocused = (activePocket: Currency) => () => {
-    setActivePocket(activePocket)
-    // This is not needed for current use case, but if we want to refetch rates on active pocket change, then we need something like this
-    // updatePocketsAmounts(activePocket)
+  const onPocketFocused = (pocketType: PocketType) => () => {
+    dispatch(pocketActions.pocketChange(pocketType))
   }
 
   const changeCurrency = (
@@ -144,8 +139,8 @@ function ExchangeScreen({ onExchange, exchangeOngoing }: Props) {
         </Button>
       </Header>
       <Pocket
-        onChange={onPocketFromChange}
-        onFocus={onPocketFocused(currencyFrom)}
+        onChange={onPocketChange(PocketType.FROM)}
+        onFocus={onPocketFocused(PocketType.FROM)}
         onBalanceClick={onPocketFromBalanceClick}
         currency={currencyFrom}
         amount={pocketFromAmount}
@@ -157,8 +152,8 @@ function ExchangeScreen({ onExchange, exchangeOngoing }: Props) {
       />
       <ArrowDown color="#0074D9" />
       <Pocket
-        onChange={onPocketToChange}
-        onFocus={onPocketFocused(currencyTo)}
+        onChange={onPocketChange(PocketType.TO)}
+        onFocus={onPocketFocused(PocketType.TO)}
         onBalanceClick={onPocketToBalanceClick}
         currency={currencyTo}
         amount={pocketToAmount}

@@ -2,24 +2,38 @@ import { Currency } from 'store/types'
 
 // Action consts
 export enum PocketsActionsConsts {
-  UPDATE_POCKET = 'UPDATE_POCKET',
-  BASE_CURRENCY_CHANGED = 'BASE_CURRENCY_CHANGED',
+  POCKET_CHANGE = 'POCKET_CHANGE',
+  SET_POCKET = 'SET_POCKET',
+  FOCUS_POCKET = 'FOCUS_POCKET',
+  CHANGE_BASE_CURRENCY = 'CHANGE_BASE_CURRENCY',
 }
 
 // Action types
-export interface UpdatePocket {
-  type: PocketsActionsConsts.UPDATE_POCKET
+export interface PocketChange {
+  type: PocketsActionsConsts.POCKET_CHANGE
   pocket: PocketType
   amount?: string
   currency?: Currency
 }
 
-export interface BaseCurrencyChanged {
-  type: PocketsActionsConsts.BASE_CURRENCY_CHANGED
+export interface SetPocket {
+  type: PocketsActionsConsts.SET_POCKET
+  pocket: PocketType
+  amount?: string
+  currency?: Currency
+}
+
+export interface FocusPocket {
+  type: PocketsActionsConsts.FOCUS_POCKET
+  pocket: PocketType
+}
+
+export interface ChangeBaseCurrency {
+  type: PocketsActionsConsts.CHANGE_BASE_CURRENCY
   currency: Currency
 }
 
-export type PocketsActions = UpdatePocket | BaseCurrencyChanged
+export type PocketsActions = PocketChange | SetPocket | FocusPocket | ChangeBaseCurrency
 
 // Data types
 export interface Pocket {

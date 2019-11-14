@@ -1,9 +1,21 @@
-import { PocketsActionsConsts, UpdatePocket, PocketType } from './types'
+import { PocketsActionsConsts, PocketChange, PocketType, SetPocket } from './types'
 import { Currency } from 'store/types'
 
-export const updatePocket = (pocket: PocketType, amount?: string, currency?: Currency): UpdatePocket => ({
-  type: PocketsActionsConsts.UPDATE_POCKET,
+export const pocketChange = (pocket: PocketType, amount?: string, currency?: Currency): PocketChange => ({
+  type: PocketsActionsConsts.POCKET_CHANGE,
   pocket,
   amount,
   currency,
+})
+
+export const setPocket = (pocket: PocketType, amount?: string, currency?: Currency): SetPocket => ({
+  type: PocketsActionsConsts.SET_POCKET,
+  pocket,
+  amount,
+  currency,
+})
+
+export const focusPocket = (pocket: PocketType) => ({
+  type: PocketsActionsConsts.FOCUS_POCKET,
+  pocket,
 })
