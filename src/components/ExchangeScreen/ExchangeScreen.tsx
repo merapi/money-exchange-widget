@@ -5,6 +5,7 @@ import { Accounts, Currency } from '@types'
 import { SUPPORTED_CURRENCIES } from 'config/consts'
 import { useSelector, useDispatch } from 'react-redux'
 import * as ratesSelectors from 'store/rates/selectors'
+import * as ratesActions from 'store/rates/actions'
 
 interface Props {
   accounts: Accounts | null
@@ -29,6 +30,10 @@ function ExchangeScreen({ accounts, onExchange, exchangeOngoing }: Props) {
   const abortController = new window.AbortController()
 
   const pairRate = rates[currencyTo] || 0
+
+  useEffect(() => {
+    dispatch(ratesActions.loopFetchRates())
+  }, [])
 
   function updatePocketsAmounts(activePocket: Currency) {
     if (activePocket === currencyFrom) {
