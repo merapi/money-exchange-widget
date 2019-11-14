@@ -24,6 +24,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
+    semi: ['error', 'never'],
     '@typescript-eslint/explicit-function-return-type': [
       'off',
       {

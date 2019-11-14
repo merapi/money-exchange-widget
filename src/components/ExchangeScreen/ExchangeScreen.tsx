@@ -7,6 +7,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import * as ratesSelectors from 'store/rates/selectors'
 import * as ratesActions from 'store/rates/actions'
 import * as accountSelectors from 'store/accounts/selectors'
+import * as pocketSelectors from 'store/pockets/selectors'
+import * as pocketActions from 'store/pockets/actions'
+import { PocketType } from 'store/pockets/types'
 
 interface Props {
   onExchange: (from: Currency, to: Currency, amount: string, rate: number, result: string) => void
@@ -14,18 +17,19 @@ interface Props {
 }
 
 function ExchangeScreen({ onExchange, exchangeOngoing }: Props) {
+  const dispatch = useDispatch()
+
   const accounts = useSelector(accountSelectors.accounts)
   const rates = useSelector(ratesSelectors.rates)
+  const pocketFromAmount = useSelector(pocketSelectors.pocketAmount(PocketType.FROM))
+  const pocketToAmount = useSelector(pocketSelectors.pocketAmount(PocketType.TO))
+
   const store = useSelector(state => state) // for quick debugging TODO: remove
-  const dispatch = useDispatch()
 
   const [currencyFrom, setCurrencyFrom] = useState<Currency>('USD')
   const [currencyTo, setCurrencyTo] = useState<Currency>('PLN')
 
   const [activePocket, setActivePocket] = useState<Currency>(currencyFrom)
-
-  const [pocketFromAmount, setPocketFromAmount] = useState('')
-  const [pocketToAmount, setPocketToAmount] = useState('')
 
   const [resetTimer, setResetTimer] = useState(0)
   const abortController = new window.AbortController()
@@ -38,9 +42,9 @@ function ExchangeScreen({ onExchange, exchangeOngoing }: Props) {
 
   function updatePocketsAmounts(activePocket: Currency) {
     if (activePocket === currencyFrom) {
-      setPocketToAmount(pocketFromAmount ? (parseFloat(pocketFromAmount) * pairRate).toFixed(2) : '')
+      // setPocketToAmount(pocketFromAmount ? (parseFloat(pocketFromAmount) * pairRate).toFixed(2) : '')
     } else {
-      setPocketFromAmount(pocketToAmount ? (parseFloat(pocketToAmount) / pairRate).toFixed(2) : '')
+      // setPocketFromAmount(pocketToAmount ? (parseFloat(pocketToAmount) / pairRate).toFixed(2) : '')
     }
   }
 
@@ -65,25 +69,19 @@ function ExchangeScreen({ onExchange, exchangeOngoing }: Props) {
     alert('Go back')
   }
 
-  const onPocketFromChange = (value: string) => {
-    if (parseFloat(value) > 9999999) return
-    setPocketFromAmount(value)
-    setPocketToAmount(value ? (parseFloat(value) * pairRate).toFixed(2) : '')
-    setActivePocket(currencyFrom)
+  const onPocketFromChange = (amount: string) => {
+    dispatch(pocketActions.updatePocket(PocketType.FROM, amount))
   }
-  const onPocketToChange = (value: string) => {
-    if (parseFloat(value) > 9999999) return
-    setPocketToAmount(value)
-    setPocketFromAmount(value ? (parseFloat(value) / pairRate).toFixed(2) : '')
-    setActivePocket(currencyTo)
+  const onPocketToChange = (amount: string) => {
+    dispatch(pocketActions.updatePocket(PocketType.TO, amount))
   }
 
   const onPocketFromBalanceClick = (balance: string) => () => {
-    setPocketFromAmount(balance)
+    // setPocketFromAmount(balance)
     onPocketFromChange(balance)
   }
   const onPocketToBalanceClick = (balance: string) => () => {
-    setPocketToAmount(balance)
+    // setPocketToAmount(balance)
     onPocketToChange(balance)
   }
 
@@ -101,7 +99,7 @@ function ExchangeScreen({ onExchange, exchangeOngoing }: Props) {
     setCurrencyFunction(currency)
     if (isMainPocket) {
       setActivePocket(currency)
-      setPocketToAmount('')
+      // setPocketToAmount('')
       abortController.abort()
       setResetTimer(resetTimer + 1)
     }
