@@ -24,7 +24,7 @@ const BareAccountsList = ({ className }: Props) => {
 
   return (
     <div className={className}>
-      <div>Raw accounts from server:</div>
+      <div>Accounts:</div>
       {accounts !== null ? listAccounts(accounts) : 'Loading...'}
     </div>
   )

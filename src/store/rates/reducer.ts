@@ -10,7 +10,7 @@ const initialState: RatesState = {
 
 export default (state: RatesState = initialState, action: RatesActions) => {
   switch (action.type) {
-    case RatesActionsConsts.FETCH_RATES_SUCCESS: {
+    case RatesActionsConsts.SET_RATES: {
       const { baseCurrency, rates } = action
       return {
         ...state,

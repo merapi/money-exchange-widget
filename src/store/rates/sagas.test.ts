@@ -28,7 +28,7 @@ describe('Rates saga', () => {
     const generatorCloneErrorPath = generator.clone()
 
     currentYield = generator.next(response).value
-    const yieldPutSuccess = put(actions.fetchRatesSuccess(response.base, response.rates))
+    const yieldPutSuccess = put(actions.setRates(response.base, response.rates))
     expect(currentYield).toEqual(yieldPutSuccess)
 
     currentYield = generator.next().value

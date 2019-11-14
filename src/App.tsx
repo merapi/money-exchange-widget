@@ -6,14 +6,22 @@ import { Currency } from 'store/types'
 import { Accounts } from 'store/accounts/types'
 import { useDispatch, useSelector } from 'react-redux'
 import * as accountActions from 'store/accounts/actions'
+import Button from 'components/Button'
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
+  const [showExchangeScreen, setShowExchangeScreen] = useState(false)
   const [exchangeOngoing, setExchangeOngoing] = useState<boolean>(false)
+
+  const store = useSelector(state => state) // store dump at the bottom
 
   useEffect(() => {
     dispatch(accountActions.fetchAccounts())
   }, [])
+
+  const toggleExchangeScreen = () => {
+    setShowExchangeScreen(!showExchangeScreen)
+  }
 
   async function onExchange(from: Currency, to: Currency, amount: string, rate: number, result: string) {
     try {
@@ -37,8 +45,12 @@ const App: React.FC = () => {
   return (
     <React.Fragment>
       <GlobalStyle />
-      <ExchangeScreen onExchange={onExchange} exchangeOngoing={exchangeOngoing} />
+      {showExchangeScreen && (
+        <ExchangeScreen onCancel={toggleExchangeScreen} onExchange={onExchange} exchangeOngoing={exchangeOngoing} />
+      )}
       <AccountsList />
+      <Button onClick={toggleExchangeScreen}>{showExchangeScreen ? `Hide` : `Show`} Exchange Screen</Button>
+      {process.env.NODE_ENV === 'development' && <pre>{JSON.stringify(store, null, 2)}</pre>}
     </React.Fragment>
   )
 }

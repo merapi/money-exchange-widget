@@ -5,7 +5,8 @@ export enum PocketsActionsConsts {
   POCKET_CHANGE = 'POCKET_CHANGE',
   SET_POCKET = 'SET_POCKET',
   FOCUS_POCKET = 'FOCUS_POCKET',
-  CHANGE_BASE_CURRENCY = 'CHANGE_BASE_CURRENCY',
+  BASE_CURRENCY_CHANGED = 'BASE_CURRENCY_CHANGED',
+  // CALCULATE_POCKETS = 'CALCULATE_POCKETS',
 }
 
 // Action types
@@ -28,12 +29,12 @@ export interface FocusPocket {
   pocket: PocketType
 }
 
-export interface ChangeBaseCurrency {
-  type: PocketsActionsConsts.CHANGE_BASE_CURRENCY
+export interface BaseCurrencyChanged {
+  type: PocketsActionsConsts.BASE_CURRENCY_CHANGED
   currency: Currency
 }
 
-export type PocketsActions = PocketChange | SetPocket | FocusPocket | ChangeBaseCurrency
+export type PocketsActions = PocketChange | SetPocket | FocusPocket | BaseCurrencyChanged
 
 // Data types
 export interface Pocket {

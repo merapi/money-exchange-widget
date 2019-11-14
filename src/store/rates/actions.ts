@@ -1,8 +1,20 @@
-import { Rate, RatesActionsConsts, FetchRates, LoopFetchRates, FetchRatesSuccess, FetchRatesError } from './types'
+import {
+  Rate,
+  RatesActionsConsts,
+  FetchRates,
+  StartFetchRates,
+  SetRates,
+  FetchRatesError,
+  StopFetchRates,
+} from './types'
 import { Currency } from 'store/types'
 
-export const loopFetchRates = (): LoopFetchRates => ({
-  type: RatesActionsConsts.LOOP_FETCH_RATES,
+export const startFetchRates = (): StartFetchRates => ({
+  type: RatesActionsConsts.START_FETCH_RATES,
+})
+
+export const stopFetchRates = (): StopFetchRates => ({
+  type: RatesActionsConsts.STOP_FETCH_RATES,
 })
 
 export const fetchRates = (baseCurrency: Currency): FetchRates => ({
@@ -10,8 +22,8 @@ export const fetchRates = (baseCurrency: Currency): FetchRates => ({
   baseCurrency,
 })
 
-export const fetchRatesSuccess = (baseCurrency: Currency, rates: Rate): FetchRatesSuccess => ({
-  type: RatesActionsConsts.FETCH_RATES_SUCCESS,
+export const setRates = (baseCurrency: Currency, rates: Rate): SetRates => ({
+  type: RatesActionsConsts.SET_RATES,
   baseCurrency,
   rates,
 })

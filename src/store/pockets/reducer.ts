@@ -28,10 +28,16 @@ export default (state: PocketsState = initialState, action: PocketsActions) => {
         ...state,
       }
       if (currency !== undefined) {
-        newState[pocket].currency = currency
+        newState[pocket] = {
+          ...newState[pocket],
+          currency,
+        }
       }
       if (amount !== undefined) {
-        newState[pocket].amount = amount
+        newState[pocket] = {
+          ...newState[pocket],
+          amount,
+        }
       }
 
       return newState

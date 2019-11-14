@@ -19,3 +19,12 @@ export const focusPocket = (pocket: PocketType) => ({
   type: PocketsActionsConsts.FOCUS_POCKET,
   pocket,
 })
+
+export const baseCurrencyChanged = (currency: Currency) => ({
+  type: PocketsActionsConsts.BASE_CURRENCY_CHANGED,
+  currency,
+})
+
+// export const calculatePockets = () => ({
+//   type: PocketsActionsConsts.CALCULATE_POCKETS,
+// })

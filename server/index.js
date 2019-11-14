@@ -62,9 +62,16 @@ app.get('/exchange', async (req, res) => {
 app.get('/', async (req, res) => {
   const qs = req.query
   const path = req.originalUrl.substring(1)
-  const fxJson = await got(
-    `https://api.exchangeratesapi.io/latest${path}&symbols=${SUPPORTED_CURRENCIES.join(',')}`,
-  ).then(response => JSON.parse(response.body))
+  const url = `https://api.exchangeratesapi.io/latest${path}`
+  // symbols EUR->EUR is broken
+  // console.log(url)
+  let fxJsonBroken = await got(url).then(response => JSON.parse(response.body))
+  let fxJson = { ...fxJsonBroken, rates: {} }
+  SUPPORTED_CURRENCIES.forEach(currency => {
+    fxJson.rates[currency] = fxJsonBroken.rates[currency]
+  })
+  fxJson.rates[qs.base] = 1
+
   for (currency in fxJson.rates) {
     if (currency !== qs.base) {
       fxJson.rates[currency] = fxJson.rates[currency] * (Math.random() * (1.01 - 0.99) + 0.99) // change rate by max 1%

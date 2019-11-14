@@ -2,15 +2,20 @@ import { Currency } from 'store/types'
 
 // Action consts
 export enum RatesActionsConsts {
-  LOOP_FETCH_RATES = 'LOOP_FETCH_RATES',
+  START_FETCH_RATES = 'START_FETCH_RATES',
+  STOP_FETCH_RATES = 'STOP_FETCH_RATES',
   FETCH_RATES = 'FETCH_RATES',
-  FETCH_RATES_SUCCESS = 'FETCH_RATES_SUCCESS',
+  SET_RATES = 'SET_RATES',
   FETCH_RATES_ERROR = 'FETCH_RATES_ERROR',
 }
 
 // Action types
-export interface LoopFetchRates {
-  type: RatesActionsConsts.LOOP_FETCH_RATES
+export interface StartFetchRates {
+  type: RatesActionsConsts.START_FETCH_RATES
+}
+
+export interface StopFetchRates {
+  type: RatesActionsConsts.STOP_FETCH_RATES
 }
 
 export interface FetchRates {
@@ -18,8 +23,8 @@ export interface FetchRates {
   baseCurrency: Currency
 }
 
-export interface FetchRatesSuccess {
-  type: RatesActionsConsts.FETCH_RATES_SUCCESS
+export interface SetRates {
+  type: RatesActionsConsts.SET_RATES
   baseCurrency: Currency
   rates: Rate
 }
@@ -29,7 +34,7 @@ export interface FetchRatesError {
   error: Error
 }
 
-export type RatesActions = LoopFetchRates | FetchRates | FetchRatesSuccess
+export type RatesActions = StartFetchRates | FetchRates | SetRates
 
 // Data types
 export type Rate = {
