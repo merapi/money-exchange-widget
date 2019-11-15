@@ -45,9 +45,7 @@ const App: React.FC = () => {
   return (
     <React.Fragment>
       <GlobalStyle />
-      {showExchangeScreen && (
-        <ExchangeScreen onCancel={toggleExchangeScreen} onExchange={onExchange} exchangeOngoing={exchangeOngoing} />
-      )}
+      {showExchangeScreen && <ExchangeScreen onCancel={toggleExchangeScreen} />}
       <AccountsList />
       <Button onClick={toggleExchangeScreen}>{showExchangeScreen ? `Hide` : `Show`} Exchange Screen</Button>
       {process.env.NODE_ENV === 'development' && <pre>{JSON.stringify(store, null, 2)}</pre>}

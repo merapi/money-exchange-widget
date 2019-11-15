@@ -32,3 +32,10 @@ margin-right: 10px;
 cursor: ${({ active }) => (active ? 'default' : 'pointer')}
 opacity: ${({ active }) => (active ? 1 : 0.5)}
 `
+
+export const ErrorMessage = styled.div`
+  background: rgba(255, 0, 0, 0.4);
+  padding: 5px 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+`

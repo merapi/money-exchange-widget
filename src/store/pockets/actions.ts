@@ -25,6 +25,20 @@ export const baseCurrencyChanged = (currency: Currency) => ({
   currency,
 })
 
+export const exchange = () => ({
+  type: PocketsActionsConsts.EXCHANGE,
+})
+
+export const exchangeOngoing = (is: boolean) => ({
+  type: PocketsActionsConsts.EXCHANGE_ONGOING,
+  is,
+})
+
+export const exchangeError = (error: Error | false) => ({
+  type: PocketsActionsConsts.EXCHANGE_ERROR,
+  error,
+})
+
 // export const calculatePockets = () => ({
 //   type: PocketsActionsConsts.CALCULATE_POCKETS,
 // })

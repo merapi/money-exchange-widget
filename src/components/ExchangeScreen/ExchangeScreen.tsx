@@ -11,15 +11,13 @@ import * as pocketSelectors from 'store/pockets/selectors'
 import * as pocketActions from 'store/pockets/actions'
 import { PocketType } from 'store/pockets/types'
 import Button from 'components/Button'
-import { Container, ArrowDown, CurrencySelect, CurrencyOption, Header } from './Elements'
+import { Container, ArrowDown, CurrencySelect, CurrencyOption, Header, ErrorMessage } from './Elements'
 
 interface Props {
   onCancel: () => void
-  onExchange: (from: Currency, to: Currency, amount: string, rate: number, result: string) => void
-  exchangeOngoing: boolean
 }
 
-function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
+function ExchangeScreen({ onCancel }: Props) {
   const dispatch = useDispatch()
 
   const accounts = useSelector(accountSelectors.accounts)
@@ -30,6 +28,9 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
   const currencyFrom = useSelector(pocketSelectors.pocketCurrency(PocketType.FROM))
   const currencyTo = useSelector(pocketSelectors.pocketCurrency(PocketType.TO))
 
+  const exchangeOngoing = useSelector(pocketSelectors.exchangeOngoing)
+  const exchangeError = useSelector(pocketSelectors.exchangeError)
+
   useEffect(() => {
     dispatch(ratesActions.startFetchRates())
     return () => {
@@ -39,6 +40,10 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
 
   const setCurrency = (pocket: PocketType) => (currency: Currency) => {
     dispatch(pocketActions.pocketChange(pocket, undefined, currency))
+  }
+
+  const onExchange = () => {
+    dispatch(pocketActions.exchange())
   }
 
   const pocketFromBalance = useSelector(accountSelectors.accountBalance(currencyFrom))
@@ -96,13 +101,16 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
 
   return (
     <Container>
+      {exchangeError && <ErrorMessage>{exchangeError}</ErrorMessage>}
       <Header>
         <Button onClick={onCancelClick} background="#282c34" hoverBackground="#3b3e45">
           Cancel
         </Button>
         <Button
-          disabled={!exchangePossible || exchangeOngoing}
-          onClick={() => {}}
+          // disabled={!exchangePossible || exchangeOngoing}
+          // for error message testing
+          disabled={exchangeOngoing}
+          onClick={onExchange}
           background="#0074D9"
           hoverBackground="#2499ff"
         >
@@ -113,6 +121,7 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
         onChange={onPocketChange(PocketType.FROM)}
         onFocus={onPocketFocused(PocketType.FROM)}
         onBalanceClick={onPocketBalanceClick(PocketType.FROM)}
+        onEnter={onExchange}
         currency={currencyFrom}
         amount={pocketFromAmount}
         balance={pocketFromBalance}
@@ -126,6 +135,7 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
         onChange={onPocketChange(PocketType.TO)}
         onFocus={onPocketFocused(PocketType.TO)}
         onBalanceClick={onPocketBalanceClick(PocketType.TO)}
+        onEnter={onExchange}
         currency={currencyTo}
         amount={pocketToAmount}
         balance={pocketToBalance}

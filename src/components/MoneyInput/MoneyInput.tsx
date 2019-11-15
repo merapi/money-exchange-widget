@@ -7,12 +7,13 @@ interface Props {
   value?: string
   onChange?: (value: string) => void
   onFocus?: () => void
+  onEnter?: () => void
   innerRef?: RefObject<HTMLInputElement>
   overBalance?: boolean
   sign?: string
 }
 
-function BareMoneyInput({ className, placeholder, onChange, onFocus, value, innerRef, sign }: Props) {
+function BareMoneyInput({ className, placeholder, onChange, onFocus, onEnter, value, innerRef, sign }: Props) {
   function allowOnlyTwoDecimals(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
     const dotSplitted = value.split('.')
@@ -27,6 +28,9 @@ function BareMoneyInput({ className, placeholder, onChange, onFocus, value, inne
   }
 
   function allowOnlyNumbersAndDot(event: KeyboardEvent) {
+    if (event.keyCode === 13 && onEnter) {
+      onEnter()
+    }
     if (
       (event.shiftKey && event.keyCode !== 9) ||
       (![37, 38, 39, 40].includes(event.keyCode) && // allow arrows

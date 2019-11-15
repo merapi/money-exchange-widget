@@ -14,6 +14,7 @@ interface Props {
   className?: string
   background?: string
   footerComponent: ReactElement
+  onEnter: () => void
 }
 
 function BarePocket({
@@ -27,6 +28,7 @@ function BarePocket({
   onBalanceClick,
   focusOnLoad,
   footerComponent,
+  onEnter,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -50,6 +52,7 @@ function BarePocket({
           value={amount}
           onChange={onChange}
           onFocus={onFocus}
+          onEnter={onEnter}
         />
       </Row>
       <Balance overBalance={overBalance} title="Click to use this amount" onClick={onBalanceClick(balance)}>
