@@ -11,6 +11,7 @@ import * as pocketSelectors from 'store/pockets/selectors'
 import * as pocketActions from 'store/pockets/actions'
 import { PocketType } from 'store/pockets/types'
 import Button from 'components/Button'
+import { Container, ArrowDown, CurrencySelect, CurrencyOption, Header } from './Elements'
 
 interface Props {
   onCancel: () => void
@@ -29,16 +30,16 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
   const currencyFrom = useSelector(pocketSelectors.pocketCurrency(PocketType.FROM))
   const currencyTo = useSelector(pocketSelectors.pocketCurrency(PocketType.TO))
 
-  const setCurrency = (pocket: PocketType) => (currency: Currency) => {
-    dispatch(pocketActions.pocketChange(pocket, undefined, currency))
-  }
-
   useEffect(() => {
     dispatch(ratesActions.startFetchRates())
     return () => {
       dispatch(ratesActions.stopFetchRates())
     }
   }, [])
+
+  const setCurrency = (pocket: PocketType) => (currency: Currency) => {
+    dispatch(pocketActions.pocketChange(pocket, undefined, currency))
+  }
 
   const pocketFromBalance = accounts ? (accounts[currencyFrom] || 0).toFixed(2) : ''
   const pocketToBalance = accounts ? (accounts[currencyTo] || 0).toFixed(2) : ''
@@ -134,38 +135,5 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
     </Container>
   )
 }
-
-const Container = styled.div`
-  position: relative;
-  max-width: 400px;
-`
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-`
-
-const ArrowDown = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 15px solid ${({ color }) => color};
-`
-
-const CurrencySelect = styled.div`
-  display: flex;
-  margin-top: 20px;
-  justify-content: center;
-`
-const CurrencyOption = styled.div<{ active: boolean }>`
-  margin-right: 10px;
-  cursor: ${({ active }) => (active ? 'default' : 'pointer')}
-  opacity: ${({ active }) => (active ? 1 : 0.5)}
-`
 
 export default ExchangeScreen
