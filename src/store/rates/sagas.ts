@@ -6,13 +6,14 @@ import * as selectors from './selectors'
 import * as pocketSelectors from 'store/pockets/selectors'
 import { PocketType, PocketsActionsConsts } from 'store/pockets/types'
 import { Currency } from 'store/types'
+import { FX_FETCH_TIMEOUT, FX_FETCH_INTERVAL } from 'config/consts'
 
 export function* fetchRates(baseCurrency: Currency) {
   const abortController = new window.AbortController()
   try {
     const winner = yield race({
       response: call(Api.finance.fetchRates, baseCurrency, abortController),
-      timeout: delay(3000),
+      timeout: delay(FX_FETCH_TIMEOUT),
     })
 
     if (winner.response) {
@@ -39,7 +40,7 @@ export function* syncFetchRates() {
       // const baseCurrency = yield select(pocketSelectors.pocketCurrency(PocketType.FROM))
       const taskFetchRates = yield fork(fetchRates, baseCurrency)
       const winner = yield race({
-        timer: delay(1000 * 60),
+        timer: delay(FX_FETCH_INTERVAL),
         baseCurrencyChanged: take(PocketsActionsConsts.BASE_CURRENCY_CHANGED),
       })
       baseCurrency = yield select(pocketSelectors.pocketCurrency(PocketType.FROM))

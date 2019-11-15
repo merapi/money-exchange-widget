@@ -21,7 +21,7 @@ export function* pocketChange(action: PocketChange) {
 
     if (amount !== undefined || currency !== undefined) {
       const currentlyFocusedPocket = yield select(pocketSelectors.focusedPocket)
-      if (pocket !== currentlyFocusedPocket) {
+      if (currency && !amount && pocket === currentlyFocusedPocket) {
         yield put(pocketActions.focusPocket(pocket))
       }
 
@@ -40,7 +40,7 @@ export function* calculateExchange(action: PocketsActions | RatesActions) {
     const currentlyFocusedPocket = yield* select(pocketSelectors.focusedPocket)
 
     if (action.type === PocketsActionsConsts.SET_POCKET) {
-      if (action.pocket !== currentlyFocusedPocket && 'amount' in action) {
+      if (action.pocket !== currentlyFocusedPocket && action.amount !== undefined && action.currency === undefined) {
         console.log(`^ don't calculate`)
         return
       }
@@ -85,7 +85,12 @@ export function* calculateExchange(action: PocketsActions | RatesActions) {
 }
 
 export function* baseCurrencyChanged(action: BaseCurrencyChanged) {
-  yield put(pocketActions.setPocket(PocketType.TO, ''))
+  const currentlyFocusedPocket = yield* select(pocketSelectors.focusedPocket)
+  if (currentlyFocusedPocket === PocketType.FROM) {
+    yield put(pocketActions.setPocket(PocketType.TO, ''))
+  } else {
+    yield put(pocketActions.setPocket(PocketType.FROM, ''))
+  }
 }
 
 export default function*() {

@@ -1,8 +1,7 @@
 import { Currency } from 'store/types'
 import { Rate } from 'store/rates/types'
 import { Accounts } from 'store/accounts/types'
-
-const apiUrl = `http://localhost:9000`
+import { API_URL } from 'config/consts'
 
 interface FetchOptions {
   signal?: AbortSignal
@@ -24,7 +23,7 @@ const finance = {
     if (abortController) {
       options.signal = abortController.signal
     }
-    return await fetch(`${apiUrl}/?base=${baseCurrency}`, options).then(response => response.json())
+    return await fetch(`${API_URL}/?base=${baseCurrency}`, options).then(response => response.json())
   },
 }
 
@@ -34,7 +33,7 @@ const user = {
     if (abortController) {
       options.signal = abortController.signal
     }
-    return await fetch(`${apiUrl}/accounts`, options).then(response => response.json())
+    return await fetch(`${API_URL}/accounts`, options).then(response => response.json())
   },
 }
 
