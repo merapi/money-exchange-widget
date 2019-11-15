@@ -24,7 +24,7 @@ export type AccountsActions = FetchAccounts | SetAccounts
 
 // Data types
 export type Accounts = {
-  [currency in Currency]?: number
+  [currency in Currency]?: string
 }
 
 // State type

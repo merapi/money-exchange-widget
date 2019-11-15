@@ -41,8 +41,8 @@ function ExchangeScreen({ onCancel, onExchange, exchangeOngoing }: Props) {
     dispatch(pocketActions.pocketChange(pocket, undefined, currency))
   }
 
-  const pocketFromBalance = accounts ? (accounts[currencyFrom] || 0).toFixed(2) : ''
-  const pocketToBalance = accounts ? (accounts[currencyTo] || 0).toFixed(2) : ''
+  const pocketFromBalance = useSelector(accountSelectors.accountBalance(currencyFrom))
+  const pocketToBalance = useSelector(accountSelectors.accountBalance(currencyTo))
   const exchangePossible =
     !!pocketFromAmount &&
     parseFloat(pocketFromAmount) > 0 &&

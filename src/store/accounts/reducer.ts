@@ -2,8 +2,8 @@ import { AccountsState, AccountsActions, AccountsActionsConsts } from './types'
 
 const initialState: AccountsState = {
   raw: {
-    USD: 0,
-    PLN: 0,
+    USD: '0',
+    PLN: '0',
   },
 }
 

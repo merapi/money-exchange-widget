@@ -34,7 +34,7 @@ export function* pocketChange(action: PocketChange) {
 }
 
 export function* calculateExchange(action: PocketsActions | RatesActions) {
-  console.log(`calculateExchange triggered by:`, action)
+  console.log(`calculateExchange triggered by:`, action) // just to explain logic below
 
   try {
     const currentlyFocusedPocket = yield* select(pocketSelectors.focusedPocket)

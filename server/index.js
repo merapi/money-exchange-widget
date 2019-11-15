@@ -15,10 +15,10 @@ app.use((req, res, next) => {
 
 let accounts = {
   raw: {
-    USD: 1000,
-    GBP: 2000,
-    EUR: 3000,
-    PLN: 4000,
+    USD: '1000',
+    GBP: '2000',
+    EUR: '3000',
+    PLN: '4000',
   },
 }
 
@@ -44,15 +44,15 @@ app.get('/exchange', async (req, res) => {
 
   console.log(`💱 New exchange ${qs.amount} ${qs.from} to ${toAmount} ${qs.to}, rate ${rate}`)
 
-  if (accounts.raw[qs.from] - fromAmount < 0) {
+  if (parseFloat(accounts.raw[qs.from]) - fromAmount < 0) {
     const error = '🚫 Not enough money'
     console.error(error)
     console.log()
     return res.json({ error })
   }
 
-  accounts.raw[qs.from] -= fromAmount
-  accounts.raw[qs.to] += toAmount
+  accounts.raw[qs.from] = (parseFloat(accounts.raw[qs.from]) - fromAmount).toFixed(2)
+  accounts.raw[qs.to] = toAmount.toFixed(2)
 
   console.log('✅ Exchange success, updated accounts 💰:', accounts)
   console.log()
