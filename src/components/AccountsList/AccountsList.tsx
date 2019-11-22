@@ -6,7 +6,7 @@ import * as accountSelectors from 'store/accounts/selectors'
 import { useSelector } from 'react-redux'
 
 interface Props {
-  className?: string
+  className?: string;
 }
 
 const BareAccountsList = ({ className }: Props) => {
@@ -24,8 +24,14 @@ const BareAccountsList = ({ className }: Props) => {
 
   return (
     <div className={className}>
-      <div>Accounts:</div>
-      {accounts !== null ? listAccounts(accounts) : 'Loading...'}
+      {accounts !== null ? (
+        <>
+          <div>Accounts:</div>
+          {listAccounts(accounts)}
+        </>
+      ) : (
+        'Loading accounts...'
+      )}
     </div>
   )
 }

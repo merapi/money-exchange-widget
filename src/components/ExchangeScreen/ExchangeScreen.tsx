@@ -14,7 +14,7 @@ import Button from 'components/Button'
 import { Container, ArrowDown, CurrencySelect, CurrencyOption, Header, ErrorMessage } from './Elements'
 
 interface Props {
-  onCancel: () => void
+  onCancel: () => void;
 }
 
 function ExchangeScreen({ onCancel }: Props) {
@@ -118,6 +118,7 @@ function ExchangeScreen({ onCancel }: Props) {
         </Button>
       </Header>
       <Pocket
+        name={PocketType.FROM}
         onChange={onPocketChange(PocketType.FROM)}
         onFocus={onPocketFocused(PocketType.FROM)}
         onBalanceClick={onPocketBalanceClick(PocketType.FROM)}
@@ -132,6 +133,7 @@ function ExchangeScreen({ onCancel }: Props) {
       />
       <ArrowDown color="#0074D9" />
       <Pocket
+        name={PocketType.TO}
         onChange={onPocketChange(PocketType.TO)}
         onFocus={onPocketFocused(PocketType.TO)}
         onBalanceClick={onPocketBalanceClick(PocketType.TO)}

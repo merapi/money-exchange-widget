@@ -1,19 +1,21 @@
 import React, { KeyboardEvent, ChangeEvent, RefObject } from 'react'
 import styled from 'styled-components'
+import { PocketType } from 'store/pockets/types'
 
 interface Props {
-  className?: string
-  placeholder?: string
-  value?: string
-  onChange?: (value: string) => void
-  onFocus?: () => void
-  onEnter?: () => void
-  innerRef?: RefObject<HTMLInputElement>
-  overBalance?: boolean
-  sign?: string
+  name: PocketType;
+  className?: string;
+  placeholder?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  onFocus?: () => void;
+  onEnter?: () => void;
+  innerRef?: RefObject<HTMLInputElement>;
+  overBalance?: boolean;
+  sign?: string;
 }
 
-function BareMoneyInput({ className, placeholder, onChange, onFocus, onEnter, value, innerRef, sign }: Props) {
+function BareMoneyInput({ className, name, placeholder, onChange, onFocus, onEnter, value, innerRef, sign }: Props) {
   function allowOnlyTwoDecimals(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
     const dotSplitted = value.split('.')
@@ -44,6 +46,8 @@ function BareMoneyInput({ className, placeholder, onChange, onFocus, onEnter, va
 
   const passProps = {
     className,
+    'data-testid': name,
+    name,
     placeholder,
     onFocus,
     ref: innerRef,

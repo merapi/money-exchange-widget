@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.json",
+  "typeRoots": ["./support"],
+  "types": ["cypress", "@types/testing-library__cypress"],
+  "include": ["integration/*.ts", "support/*.ts", "../node_modules/cypress"]
+}

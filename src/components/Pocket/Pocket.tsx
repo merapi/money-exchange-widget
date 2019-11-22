@@ -1,23 +1,26 @@
 import React, { ReactElement, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import MoneyInput from 'components/MoneyInput'
+import { PocketType } from 'store/pockets/types'
 
 interface Props {
-  mainPocket?: boolean
-  currency: string
-  amount: string
-  balance: string
-  onChange: (value: string) => void
-  onFocus: () => void
-  onBalanceClick: (value: string) => () => void
-  focusOnLoad?: boolean
-  className?: string
-  background?: string
-  footerComponent: ReactElement
-  onEnter: () => void
+  name: PocketType;
+  mainPocket?: boolean;
+  currency: string;
+  amount: string;
+  balance: string;
+  onChange: (value: string) => void;
+  onFocus: () => void;
+  onBalanceClick: (value: string) => () => void;
+  focusOnLoad?: boolean;
+  className?: string;
+  background?: string;
+  footerComponent: ReactElement;
+  onEnter: () => void;
 }
 
 function BarePocket({
+  name,
   mainPocket,
   currency,
   amount,
@@ -46,6 +49,7 @@ function BarePocket({
       <Row>
         <Currency>{currency}</Currency>
         <MoneyInput
+          name={name}
           overBalance={overBalance}
           innerRef={inputRef}
           sign={sign}

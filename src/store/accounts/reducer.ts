@@ -1,10 +1,7 @@
 import { AccountsState, AccountsActions, AccountsActionsConsts } from './types'
 
 const initialState: AccountsState = {
-  raw: {
-    USD: '0',
-    PLN: '0',
-  },
+  raw: null,
 }
 
 export default (state: AccountsState = initialState, action: AccountsActions) => {

@@ -4,17 +4,17 @@ import { Accounts } from 'store/accounts/types'
 import { API_URL } from 'config/consts'
 
 interface FetchOptions {
-  signal?: AbortSignal
+  signal?: AbortSignal;
 }
 
 export interface FetchRatesResponse {
-  base: Currency
-  date: string
-  rates: Rate
+  base: Currency;
+  date: string;
+  rates: Rate;
 }
 
 export interface FetchAccountsResponse {
-  raw: Accounts
+  raw: Accounts;
 }
 
 const finance = {

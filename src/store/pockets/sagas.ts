@@ -107,6 +107,10 @@ export function* exchangePockets() {
     yield delay(EXCHANGE_FAKE_DELAY)
 
     const accounts = yield* select(accountSelectors.accounts)
+    if (!accounts) {
+      throw new Error(`No accounts data`)
+    }
+
     const fromCurrency = yield* select(pocketSelectors.pocketCurrency(PocketType.FROM))
     const toCurrency = yield* select(pocketSelectors.pocketCurrency(PocketType.TO))
     const fromAmount = yield* select(pocketSelectors.pocketAmount(PocketType.FROM))
