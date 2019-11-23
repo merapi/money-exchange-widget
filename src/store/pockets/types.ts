@@ -14,41 +14,41 @@ export enum PocketsActionsConsts {
 
 // Action types
 export interface PocketChange {
-  type: PocketsActionsConsts.POCKET_CHANGE;
-  pocket: PocketType;
-  amount?: string;
-  currency?: Currency;
+  type: PocketsActionsConsts.POCKET_CHANGE
+  pocket: PocketType
+  amount?: string
+  currency?: Currency
 }
 
 export interface SetPocket {
-  type: PocketsActionsConsts.SET_POCKET;
-  pocket: PocketType;
-  amount?: string;
-  currency?: Currency;
+  type: PocketsActionsConsts.SET_POCKET
+  pocket: PocketType
+  amount?: string
+  currency?: Currency
 }
 
 export interface FocusPocket {
-  type: PocketsActionsConsts.FOCUS_POCKET;
-  pocket: PocketType;
+  type: PocketsActionsConsts.FOCUS_POCKET
+  pocket: PocketType
 }
 
 export interface BaseCurrencyChanged {
-  type: PocketsActionsConsts.BASE_CURRENCY_CHANGED;
-  currency: Currency;
+  type: PocketsActionsConsts.BASE_CURRENCY_CHANGED
+  currency: Currency
 }
 
 export interface Exchange {
-  type: PocketsActionsConsts.EXCHANGE;
+  type: PocketsActionsConsts.EXCHANGE
 }
 
 export interface ExchangeOngoing {
-  type: PocketsActionsConsts.EXCHANGE_ONGOING;
-  is: boolean;
+  type: PocketsActionsConsts.EXCHANGE_ONGOING
+  is: boolean
 }
 
 export interface ExchangeError {
-  type: PocketsActionsConsts.EXCHANGE_ERROR;
-  error: Error | false;
+  type: PocketsActionsConsts.EXCHANGE_ERROR
+  error: Error | false
 }
 
 export type PocketsActions =
@@ -62,8 +62,8 @@ export type PocketsActions =
 
 // Data types
 export interface Pocket {
-  currency: Currency;
-  amount: string;
+  currency: Currency
+  amount: string
 }
 export enum PocketType {
   FROM = 'from',
@@ -72,9 +72,9 @@ export enum PocketType {
 
 // State type
 export interface PocketsState {
-  readonly from: Pocket;
-  readonly to: Pocket;
-  readonly focused: PocketType;
-  readonly exchangeOngoing: boolean;
-  readonly exchangeError: string | undefined;
+  readonly from: Pocket
+  readonly to: Pocket
+  readonly focused: PocketType
+  readonly exchangeOngoing: boolean
+  readonly exchangeError: string | undefined
 }

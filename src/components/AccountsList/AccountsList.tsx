@@ -6,7 +6,7 @@ import * as accountSelectors from 'store/accounts/selectors'
 import { useSelector } from 'react-redux'
 
 interface Props {
-  className?: string;
+  className?: string
 }
 
 const BareAccountsList = ({ className }: Props) => {

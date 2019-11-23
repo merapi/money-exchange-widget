@@ -14,7 +14,7 @@ import Button from 'components/Button'
 import { Container, ArrowDown, CurrencySelect, CurrencyOption, Header, ErrorMessage } from './Elements'
 
 interface Props {
-  onCancel: () => void;
+  onCancel: () => void
 }
 
 function ExchangeScreen({ onCancel }: Props) {

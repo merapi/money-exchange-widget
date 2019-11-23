@@ -9,15 +9,15 @@ export enum AccountsActionsConsts {
 
 // Action types
 export interface FetchAccounts {
-  type: AccountsActionsConsts.FETCH_ACCOUNTS;
+  type: AccountsActionsConsts.FETCH_ACCOUNTS
 }
 export interface FetchAccountsError {
-  type: AccountsActionsConsts.FETCH_ACCOUNTS_ERROR;
-  error: Error;
+  type: AccountsActionsConsts.FETCH_ACCOUNTS_ERROR
+  error: Error
 }
 export interface SetAccounts {
-  type: AccountsActionsConsts.SET_ACCOUNTS;
-  accounts: Accounts;
+  type: AccountsActionsConsts.SET_ACCOUNTS
+  accounts: Accounts
 }
 
 export type AccountsActions = FetchAccounts | SetAccounts
@@ -29,5 +29,5 @@ export type Accounts = {
 
 // State type
 export interface AccountsState {
-  readonly raw: Accounts | null;
+  readonly raw: Accounts | null
 }

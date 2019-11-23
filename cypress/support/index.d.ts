@@ -1,5 +1,5 @@
 declare namespace Cypress {
   interface Chainable {
-    openExchange(): Chainable<Element>;
+    openExchange(): Chainable<Element>
   }
 }

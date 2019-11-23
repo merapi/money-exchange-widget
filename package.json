@@ -14,15 +14,16 @@
   "scripts": {
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "format": "prettier '*/**/*.{js,ts,tsx}'",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --fix",
+    "format": "prettier '*/**/*.{js,ts,tsx}' --write",
+    "lint": "eslint '*/**/*.{js,ts,tsx}'",
     "server": "node server/index.js",
     "start": "react-scripts start",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "validate": "tsc --noEmit"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsc --noEmit && lint-staged"
+      "pre-commit": "npm run validate && lint-staged"
     }
   },
   "lint-staged": {
@@ -67,6 +68,7 @@
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-cypress": "^2.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.16.0",
     "express": "^4.17.1",
     "got": "^9.6.0",

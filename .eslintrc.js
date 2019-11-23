@@ -4,13 +4,7 @@ module.exports = {
     es6: true,
     'cypress/globals': true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'eslint-config-prettier',
-  ],
+  extends: ['plugin:prettier/recommended'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -23,7 +17,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'eslint-plugin-cypress'],
+  plugins: ['react', '@typescript-eslint', 'eslint-plugin-cypress', 'prettier'],
   rules: {
     semi: ['error', 'never'],
     '@typescript-eslint/explicit-function-return-type': [

@@ -11,27 +11,27 @@ export enum RatesActionsConsts {
 
 // Action types
 export interface StartFetchRates {
-  type: RatesActionsConsts.START_FETCH_RATES;
+  type: RatesActionsConsts.START_FETCH_RATES
 }
 
 export interface StopFetchRates {
-  type: RatesActionsConsts.STOP_FETCH_RATES;
+  type: RatesActionsConsts.STOP_FETCH_RATES
 }
 
 export interface FetchRates {
-  type: RatesActionsConsts.FETCH_RATES;
-  baseCurrency: Currency;
+  type: RatesActionsConsts.FETCH_RATES
+  baseCurrency: Currency
 }
 
 export interface SetRates {
-  type: RatesActionsConsts.SET_RATES;
-  baseCurrency: Currency;
-  rates: Rate;
+  type: RatesActionsConsts.SET_RATES
+  baseCurrency: Currency
+  rates: Rate
 }
 
 export interface FetchRatesError {
-  type: RatesActionsConsts.FETCH_RATES_ERROR;
-  error: Error;
+  type: RatesActionsConsts.FETCH_RATES_ERROR
+  error: Error
 }
 
 export type RatesActions = StartFetchRates | FetchRates | SetRates
@@ -43,6 +43,6 @@ export type Rate = {
 
 // State type
 export interface RatesState {
-  readonly baseCurrency: Currency;
-  readonly rates: Rate;
+  readonly baseCurrency: Currency
+  readonly rates: Rate
 }

@@ -3,16 +3,16 @@ import styled from 'styled-components'
 import { PocketType } from 'store/pockets/types'
 
 interface Props {
-  name: PocketType;
-  className?: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: (value: string) => void;
-  onFocus?: () => void;
-  onEnter?: () => void;
-  innerRef?: RefObject<HTMLInputElement>;
-  overBalance?: boolean;
-  sign?: string;
+  name: PocketType
+  className?: string
+  placeholder?: string
+  value?: string
+  onChange?: (value: string) => void
+  onFocus?: () => void
+  onEnter?: () => void
+  innerRef?: RefObject<HTMLInputElement>
+  overBalance?: boolean
+  sign?: string
 }
 
 function BareMoneyInput({ className, name, placeholder, onChange, onFocus, onEnter, value, innerRef, sign }: Props) {

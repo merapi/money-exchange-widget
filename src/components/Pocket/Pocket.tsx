@@ -4,19 +4,19 @@ import MoneyInput from 'components/MoneyInput'
 import { PocketType } from 'store/pockets/types'
 
 interface Props {
-  name: PocketType;
-  mainPocket?: boolean;
-  currency: string;
-  amount: string;
-  balance: string;
-  onChange: (value: string) => void;
-  onFocus: () => void;
-  onBalanceClick: (value: string) => () => void;
-  focusOnLoad?: boolean;
-  className?: string;
-  background?: string;
-  footerComponent: ReactElement;
-  onEnter: () => void;
+  name: PocketType
+  mainPocket?: boolean
+  currency: string
+  amount: string
+  balance: string
+  onChange: (value: string) => void
+  onFocus: () => void
+  onBalanceClick: (value: string) => () => void
+  focusOnLoad?: boolean
+  className?: string
+  background?: string
+  footerComponent: ReactElement
+  onEnter: () => void
 }
 
 function BarePocket({
