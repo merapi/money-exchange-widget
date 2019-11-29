@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import Pocket from 'components/Pocket'
-import styled from 'styled-components'
-import { Currency } from 'store/types'
-import { SUPPORTED_CURRENCIES } from 'config/consts'
-import { useSelector, useDispatch } from 'react-redux'
-import * as ratesSelectors from 'store/rates/selectors'
-import * as ratesActions from 'store/rates/actions'
-import * as accountSelectors from 'store/accounts/selectors'
-import * as pocketSelectors from 'store/pockets/selectors'
-import * as pocketActions from 'store/pockets/actions'
-import { PocketType } from 'store/pockets/types'
 import Button from 'components/Button'
-import { Container, ArrowDown, CurrencySelect, CurrencyOption, Header, ErrorMessage } from './Elements'
+import Pocket from 'components/Pocket'
+import { SUPPORTED_CURRENCIES } from 'config/consts'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import * as accountSelectors from 'store/accounts/selectors'
+import * as pocketActions from 'store/pockets/actions'
+import * as pocketSelectors from 'store/pockets/selectors'
+import { PocketType } from 'store/pockets/types'
+import * as ratesActions from 'store/rates/actions'
+import { Currency } from 'store/types'
+import { ArrowDown, Container, CurrencyOption, CurrencySelect, ErrorMessage, Header } from './Elements'
 
 interface Props {
   onCancel: () => void
@@ -20,8 +18,6 @@ interface Props {
 function ExchangeScreen({ onCancel }: Props) {
   const dispatch = useDispatch()
 
-  const accounts = useSelector(accountSelectors.accounts)
-  const rates = useSelector(ratesSelectors.rates)
   const pocketFromAmount = useSelector(pocketSelectors.pocketAmount(PocketType.FROM))
   const pocketToAmount = useSelector(pocketSelectors.pocketAmount(PocketType.TO))
 

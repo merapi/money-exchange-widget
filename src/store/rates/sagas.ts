@@ -1,12 +1,11 @@
-import { call, put, takeLatest, delay, select, cancelled, race, take, fork, cancel } from 'redux-saga/effects'
-import Api, { FetchRatesResponse } from 'api'
-import { FetchRates, RatesActionsConsts } from './types'
-import * as actions from './actions'
-import * as selectors from './selectors'
+import Api from 'api'
+import { FX_FETCH_INTERVAL, FX_FETCH_TIMEOUT } from 'config/consts'
+import { call, cancel, cancelled, delay, fork, put, race, select, take } from 'redux-saga/effects'
 import * as pocketSelectors from 'store/pockets/selectors'
-import { PocketType, PocketsActionsConsts } from 'store/pockets/types'
+import { PocketsActionsConsts, PocketType } from 'store/pockets/types'
 import { Currency } from 'store/types'
-import { FX_FETCH_TIMEOUT, FX_FETCH_INTERVAL } from 'config/consts'
+import * as actions from './actions'
+import { RatesActionsConsts } from './types'
 
 export function* fetchRates(baseCurrency: Currency) {
   const abortController = new window.AbortController()
@@ -21,8 +20,6 @@ export function* fetchRates(baseCurrency: Currency) {
     } else {
       abortController.abort()
     }
-    // const response: FetchRatesResponse = yield call(Api.finance.fetchRates, baseCurrency, abortController)
-    // yield put(actions.setRates(response.base, response.rates))
   } catch (e) {
     yield put(actions.fetchRatesError(e))
     console.error(`fetchRates`, e)
@@ -37,7 +34,6 @@ export function* syncFetchRates() {
   try {
     let baseCurrency = yield select(pocketSelectors.pocketCurrency(PocketType.FROM))
     while (true) {
-      // const baseCurrency = yield select(pocketSelectors.pocketCurrency(PocketType.FROM))
       const taskFetchRates = yield fork(fetchRates, baseCurrency)
       const winner = yield race({
         timer: delay(FX_FETCH_INTERVAL),
